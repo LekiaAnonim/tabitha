@@ -1,0 +1,177 @@
+{% extends "home/base.html" %}{% load wagtailcore_tags %}{% load static %}{% load wagtailimages_tags %}
+<!DOCTYPE html>
+<!-- This site was created in Webflow. https://www.webflow.com -->
+<!-- Last Published: Thu Apr 04 2024 08:43:55 GMT+0000 (Coordinated Universal Time) -->
+<html data-wf-domain="ecommerce-tnc.webflow.io" data-wf-page="65f2c446b3b822983c0612d0" data-wf-site="65f0219f664a58453bb579a5" lang="en">
+    <head>
+        <meta charset="utf-8"/>
+    </head>
+    <body>
+        {% block content %}
+        
+        <div class="main-block">
+            <div class="product-archive-tab-wrapper">
+                <div data-current="Tab 1" data-easing="ease-out-quart" data-duration-in="500" data-duration-out="400" class="w-tabs">
+                    <div class="product-top-bar w-tab-menu">
+                        <a data-w-tab="Tab 1" class="product-view-button w-inline-block w-tab-link w--current">
+                            <img loading="lazy" src="https://assets-global.website-files.com/65f0219f664a58453bb579a5/6603ddf246aabb8fa9fd056c_Group.svg" alt="" class="grid-list-svg"/>
+                        </a>
+                        <a data-w-tab="Tab 2" class="product-view-button w-inline-block w-tab-link">
+                            <img loading="lazy" src="https://assets-global.website-files.com/65f0219f664a58453bb579a5/6603ddf246aabb8fa9fd056b_menu%20(1)%201.svg" alt="" class="grid-list-svg"/>
+                        </a>
+                    </div>
+                    <div class="w-tab-content">
+                        <div data-w-tab="Tab 1" class="w-tab-pane w--tab-active">
+                            <div class="full-width w-dyn-list">
+                                <div role="list" class="_3-column-product-grid w-dyn-items">
+                                    {% if products %}
+                                    {% for product in products %}
+                                    <div role="listitem" class="center-align w-dyn-item">
+                                        <div class="product-card">
+                                            <a href="{% pageurl product %}" class="product-thumbnail-wrapper w-inline-block">
+                                                <img data-wf-sku-bindings="%5B%7B%22from%22%3A%22f_main_image_4dr%22%2C%22to%22%3A%22src%22%7D%5D" loading="lazy" alt="" src="{{ product.image1.url }}" sizes="(max-width: 991px) 252px, 16vw" srcset="{{product.image1.url}} 500w, {{product.image1.url}} 800w, {{product.image1.url}} 1080w, {{product.image1.url}} 1417w" class="product-thumbnail-archive"/>
+                                            </a>
+                                            <div class="w-layout-vflex product-body">
+                                                <a href="{% pageurl product %}" class="mask w-inline-block">
+                                                    <div class="product-name">{{product.product_name|title}}</div>
+                                                </a>
+                                                <div class="w-layout-hflex star-wrapper">
+                                                    <div class="star">star</div>
+                                                    <div class="star">star</div>
+                                                    <div class="star">star</div>
+                                                    <div class="star">star</div>
+                                                    <div class="star">star</div>
+                                                </div>
+                                                <div class="w-layout-hflex product-price-block">
+                                                    <div data-wf-sku-bindings="%5B%7B%22from%22%3A%22f_price_%22%2C%22to%22%3A%22innerHTML%22%7D%5D" class="product-price">$ {{product.original_price}} USD</div>
+                                                    <div data-wf-sku-conditions="%7B%22condition%22%3A%7B%22fields%22%3A%7B%22default-sku%3Acompare-at-price%22%3A%7B%22exists%22%3A%22yes%22%2C%22type%22%3A%22CommercePrice%22%7D%7D%7D%2C%22timezone%22%3A%22Asia%2FDhaka%22%7D" class="_2px-width-divider-static"></div>
+                                                    <div data-wf-sku-bindings="%5B%7B%22from%22%3A%22f_compare_at_price_7dr10dr%22%2C%22to%22%3A%22innerHTML%22%7D%5D" data-wf-sku-conditions="%7B%22condition%22%3A%7B%22fields%22%3A%7B%22default-sku%3Acompare-at-price%22%3A%7B%22exists%22%3A%22yes%22%2C%22type%22%3A%22CommercePrice%22%7D%7D%7D%2C%22timezone%22%3A%22Asia%2FDhaka%22%7D" class="discount-price">$ {{product.discount_price}} USD</div>
+                                                </div>
+                                                <div class="add-to-cart">
+                                                    <form data-node-type="commerce-add-to-cart-form" data-commerce-sku-id="65f417d25648396c93eba144" data-loading-text="Adding to cart..." data-commerce-product-id="65f417d175110061b90fb05c" class="w-commerce-commerceaddtocartform">
+                                                        <input type="submit" data-node-type="commerce-add-to-cart-button" data-loading-text="Adding to cart..." aria-busy="false" aria-haspopup="dialog" class="w-commerce-commerceaddtocartbutton product-add-button" value="Add to Cart"/>
+                                                        <a data-node-type="commerce-buy-now-button" data-default-text="Buy now" data-subscription-text="Subscribe now" aria-busy="false" aria-haspopup="false" style="display:none" class="w-commerce-commercebuynowbutton" href="/checkout">Buy now</a>
+                                                    </form>
+                                                    <div style="display:none" class="w-commerce-commerceaddtocartoutofstock" tabindex="0">
+                                                        <div>This product is out of stock.</div>
+                                                    </div>
+                                                    <div aria-live="assertive" data-node-type="commerce-add-to-cart-error" style="display:none" class="w-commerce-commerceaddtocarterror">
+                                                        <div data-node-type="commerce-add-to-cart-error" data-w-add-to-cart-quantity-error="Product is not available in this quantity." data-w-add-to-cart-general-error="Something went wrong when adding this item to the cart." data-w-add-to-cart-mixed-cart-error="You can’t purchase another product with a subscription." data-w-add-to-cart-buy-now-error="Something went wrong when trying to purchase this item." data-w-add-to-cart-checkout-disabled-error="Checkout is disabled on this site." data-w-add-to-cart-select-all-options-error="Please select an option in each set.">Product is not available in this quantity.</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% if product.on_sale %}
+                                            <div data-wf-sku-conditions="%7B%22condition%22%3A%7B%22fields%22%3A%7B%22default-sku%3Acompare-at-price%22%3A%7B%22exists%22%3A%22yes%22%2C%22type%22%3A%22CommercePrice%22%7D%7D%7D%2C%22timezone%22%3A%22Asia%2FDhaka%22%7D" class="sale-tag">On Sale</div>
+                                            {% else %}
+                                            <div></div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                    {% else %}
+                                    <div>No products available</div>
+                                    {% endif %}
+                                </div>
+                                <div role="navigation" aria-label="List" class="w-pagination-wrapper">
+                                    <a href="?90700037_page=2" aria-label="Next Page" class="w-pagination-next pagination-button">
+                                        <div class="w-inline-block">Next</div>
+                                        <svg class="w-pagination-next-icon" height="12px" width="12px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" transform="translate(0, 1)">
+                                            <path fill="none" stroke="currentColor" fill-rule="evenodd" d="M4 2l4 4-4 4"></path>
+                                        </svg>
+                                    </a>
+                                    <link rel="prerender" href="?90700037_page=2"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div data-w-tab="Tab 2" class="w-tab-pane">
+                            <div class="full-width w-dyn-list">
+                                <div role="list" class="product-list-grid w-dyn-items">
+                                    {% if products %}
+                                    {% for product in products %}
+                                    <div role="listitem" class="center-align w-dyn-item">
+                                        <div class="product-card-list">
+                                            <a href="{% pageurl product %}" class="product-thumbnail-wrapper-list w-inline-block">
+                                                <img data-wf-sku-bindings="%5B%7B%22from%22%3A%22f_main_image_4dr%22%2C%22to%22%3A%22src%22%7D%5D" loading="lazy" alt="" src="{{product.image1.url}}" sizes="(max-width: 767px) 262px, (max-width: 991px) 29vw, 21vw" srcset="{{product.image1.url}} 500w, {{product.image1.url}} 800w, {{product.image1.url}} 1080w, {{product.image1.url}} 1417w" class="product-thumbnail-archive-list"/>
+                                            </a>
+                                            <div class="product-list-middle-part">
+                                                <a href="{% pageurl product %}" class="mask w-inline-block">
+                                                    <div class="_20px-bold-title">{{product.product_name|title}}</div>
+                                                </a>
+                                                <div class="w-layout-hflex star-wrapper">
+                                                    <div class="star">star</div>
+                                                    <div class="star">star</div>
+                                                    <div class="star">star</div>
+                                                    <div class="star">star</div>
+                                                    <div class="star">star</div>
+                                                </div>
+                                                <p class="product-list-summery">{{product.short_description}}</p>
+                                            </div>
+                                            <div class="w-layout-vflex product-list-button-wrapper">
+                                                <div class="w-layout-hflex product-price-block-list">
+                                                    <div data-wf-sku-bindings="%5B%7B%22from%22%3A%22f_price_%22%2C%22to%22%3A%22innerHTML%22%7D%5D" class="product-price-list">$ {{product.original_price}} USD</div>
+                                                    <div data-wf-sku-conditions="%7B%22condition%22%3A%7B%22fields%22%3A%7B%22default-sku%3Acompare-at-price%22%3A%7B%22exists%22%3A%22yes%22%2C%22type%22%3A%22CommercePrice%22%7D%7D%7D%2C%22timezone%22%3A%22Asia%2FDhaka%22%7D" class="_2px-width-divider-static-list"></div>
+                                                    <div data-wf-sku-bindings="%5B%7B%22from%22%3A%22f_compare_at_price_7dr10dr%22%2C%22to%22%3A%22innerHTML%22%7D%5D" data-wf-sku-conditions="%7B%22condition%22%3A%7B%22fields%22%3A%7B%22default-sku%3Acompare-at-price%22%3A%7B%22exists%22%3A%22yes%22%2C%22type%22%3A%22CommercePrice%22%7D%7D%7D%2C%22timezone%22%3A%22Asia%2FDhaka%22%7D" class="discount-price-list">$ {{product.discount_price}} USD</div>
+                                                </div>
+                                                <div class="add-to-cart">
+                                                    <form data-node-type="commerce-add-to-cart-form" data-commerce-sku-id="65f417d25648396c93eba144" data-loading-text="Adding to cart..." data-commerce-product-id="65f417d175110061b90fb05c" class="w-commerce-commerceaddtocartform no-margin">
+                                                        <input type="submit" data-node-type="commerce-add-to-cart-button" data-loading-text="Adding to cart..." aria-busy="false" aria-haspopup="dialog" class="w-commerce-commerceaddtocartbutton product-add-button" value="Add to Cart"/>
+                                                        <a data-node-type="commerce-buy-now-button" data-default-text="Buy now" data-subscription-text="Subscribe now" aria-busy="false" aria-haspopup="false" style="display:none" class="w-commerce-commercebuynowbutton" href="/checkout">Buy now</a>
+                                                    </form>
+                                                    <div style="display:none" class="w-commerce-commerceaddtocartoutofstock" tabindex="0">
+                                                        <div>This product is out of stock.</div>
+                                                    </div>
+                                                    <div aria-live="assertive" data-node-type="commerce-add-to-cart-error" style="display:none" class="w-commerce-commerceaddtocarterror">
+                                                        <div data-node-type="commerce-add-to-cart-error" data-w-add-to-cart-quantity-error="Product is not available in this quantity." data-w-add-to-cart-general-error="Something went wrong when adding this item to the cart." data-w-add-to-cart-mixed-cart-error="You can’t purchase another product with a subscription." data-w-add-to-cart-buy-now-error="Something went wrong when trying to purchase this item." data-w-add-to-cart-checkout-disabled-error="Checkout is disabled on this site." data-w-add-to-cart-select-all-options-error="Please select an option in each set.">Product is not available in this quantity.</div>
+                                                    </div>
+                                                </div>
+                                                <div class="list-product-meta-wrapper">
+                                                    <div class="product-meta">
+                                                        <div class="meta-info-title">SKU:</div>
+                                                        <div data-wf-sku-bindings="%5B%7B%22from%22%3A%22f_sku_%22%2C%22to%22%3A%22innerHTML%22%7D%5D" class="paragraph-300">TNKBP0012U6</div>
+                                                    </div>
+                                                    <div class="product-meta">
+                                                        <div class="meta-info-title">Share:</div>
+                                                        <div class="social-share-icon-container">
+                                                            <a href="https://www.facebook.com/sharer/sharer.php" target="_blank" class="social-share-icon"></a>
+                                                            <a href="https://twitter.com/intent/tweet" target="_blank" class="social-share-icon twitter"></a>
+                                                            <a href="https://www.pinterest.com/pin/create/button" target="_blank" class="social-share-icon pinterest"></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% if product.on_sale %}
+                                            <div data-wf-sku-conditions="%7B%22condition%22%3A%7B%22fields%22%3A%7B%22default-sku%3Acompare-at-price%22%3A%7B%22exists%22%3A%22yes%22%2C%22type%22%3A%22CommercePrice%22%7D%7D%7D%2C%22timezone%22%3A%22Asia%2FDhaka%22%7D" class="sale-tag">On Sale</div>
+                                            {% else %}
+                                            <div></div>
+                                            {% endif %}
+                                            
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                    {% else %}
+                                    <div>No products available</div>
+                                    {% endif %}  
+                                </div>
+                                <div role="navigation" aria-label="List" class="w-pagination-wrapper">
+                                    <a href="?05839744_page=2" aria-label="Next Page" class="w-pagination-next pagination-button">
+                                        <div class="w-inline-block">Next</div>
+                                        <svg class="w-pagination-next-icon" height="12px" width="12px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" transform="translate(0, 1)">
+                                            <path fill="none" stroke="currentColor" fill-rule="evenodd" d="M4 2l4 4-4 4"></path>
+                                        </svg>
+                                    </a>
+                                    <link rel="prerender" href="?05839744_page=2"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="displaying-results">Displaying Results</div>
+                <div class="show-filter-bar">
+                    <div class="icon">filter_alt</div>
+                    <div>Filter</div>
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+    </body>
+</html>

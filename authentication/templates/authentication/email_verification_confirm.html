@@ -1,0 +1,30 @@
+{% extends 'base.html' %}{% load wagtailcore_tags %}{% load static %}{% load wagtailimages_tags %} {% load i18n %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="veiwpoint" content="width=device-widt, initial-scale=1.0" /> {% block extra_styles%}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/thanks.css' %}">{% endblock %}
+
+</head> 
+{% block content %}
+
+<div class="container-fluid hero-section" style="background-image: url('/static/images/431243036_928578379050327_5003254198322004998_n.webp'); background-size: cover; background-repeat: no-repeat;">
+    {% include "header.html" %}
+</div>
+
+<div class="display-sign-container batch-container login-container" style="z-index: 1000;">
+    <div class="card text-center">
+        <div class="card-body">
+            <h5 class="card-title">You can now proceed to login.</h5>
+            <p class="card-text"><span>Note:</span> You we will find our available courses on your Dashboard.</p>
+            <a href="{% url 'authentication:login' %}" class="btn btn-primary successful-home">Login</a>
+        </div>
+        <div class="card-footer text-muted">
+            Check your email inbox or spam.
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

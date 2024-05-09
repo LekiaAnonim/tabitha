@@ -1,0 +1,86 @@
+{% extends 'courses/base.html' %} {% load wagtailcore_tags %} {% load static %} {% load wagtailimages_tags %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">{% block title %}
+    <title>Update Profile</title>{% endblock %}
+
+</head>
+
+<body>
+    <div class="body-container">
+        {% block content %}
+        <div class="main-content">
+            <div class="course-main-content">
+                <div class="active-course-main-content personal-info-address-container">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label" for="id_username">Username:</label>
+                            <div class="helptext" id="id_username_helptext">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</div>
+                            <input class="form-control" type="text" name="username" value="{{form.username.value}}" maxlength="150" required aria-describedby="id_username_helptext" id="id_username">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="id_first_name">First name:</label>
+                            <input class="form-control" type="text" name="first_name" value="{{form.first_name.value}}" maxlength="150" id="id_first_name">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="id_last_name">Last name:</label>
+                            <input class="form-control" type="text" name="last_name" value="{{form.last_name.value}}" maxlength="150" id="id_last_name">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="id_email">Email address:</label>
+                            <input class="form-control" type="email" name="email" value="{{form.email.value}}" maxlength="254" id="id_email">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="id_country">Country:</label>
+                            <input class="form-control" type="text" name="country" value="{{form.country.value}}" maxlength="255" required id="id_country">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="id_region">Region:</label>
+                            <input class="form-control" type="text" name="region" value="{{form.region.value}}" maxlength="255" required id="id_region">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="id_gender">Gender:</label>
+                            <select class="form-select" aria-label="Default select example" name="gender" required id="id_gender">
+                                <option value="">---------</option>
+                                <option value="1" selected>Male</option>
+                                <option value="2">Female</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="id_status">Status:</label>
+                            <select class="form-select" aria-label="Default select example" name="status" id="id_status">
+                                <option value="Worker" selected>Worker</option>
+                                <option value="New Convert">New Convert</option>
+                                <option value="Member">Member</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="id_phone_number">Phone number:</label>
+                            <input class="form-control" type="text" name="phone_number" value="{{form.phone_number.value}}" maxlength="255" required id="id_phone_number">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="id_residential_address">Residential address:</label>
+                            <input class="form-control" type="text" name="residential_address" value="{{form.residential_address.value}}" maxlength="255" required id="id_residential_address">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="id_date_of_birth">Date of birth:</label>
+                            <input class="form-control" type="text" name="date_of_birth" value="{{form.date_of_birth.value}}" required id="id_date_of_birth">
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_avatar">Avatar:</label>
+                            <input type="file" class="form-control" name="avatar" accept="image/*" required id="id_avatar">
+                        </div>
+                        <input class="btn btn-primary" type="submit" value="Update">
+                    </form>
+                </div>
+            </div>
+        </div>{% endblock %}
+    </div>
+
+</body>
+
+</html>

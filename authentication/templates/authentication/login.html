@@ -1,0 +1,71 @@
+{% extends 'base.html' %}{% load wagtailcore_tags %}{% load static %}{% load wagtailimages_tags %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="veiwpoint" content="width=device-widt, initial-scale=1.0"> {% block extra_styles%}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/register.css' %}">{% endblock %}
+</head>
+
+<body>
+    {% block content %}
+    <div class="main registration-page login-page">
+        <div class="new" style="background: url({% static 'images/aboutim3.jpg' %}); background-repeat: no-repeat; background-size: cover;">
+            
+            {% include "header.html" %}
+            <h1>Login</h1>
+            <p>Login to access you dashboard</p>
+        </div>
+        <div class="com contact-us-container">
+            <div class="won">
+                <h2>
+                    Sign In
+                </h2>
+                {{login_form.errors}}
+                <form action="{% url 'authentication:login' %}" method="post" class="authentication_form" novalidate>
+                    {% csrf_token %} {% for field in login_form %}
+                    <div class="fieldWrapper">
+                        {% if field.errors %}
+                        <ul>
+                            {% for error in field.errors %}
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                {{error|escape}}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    <div class="field_card">
+                        <label for="id_username">Username:</label>
+                        <div class="helptext" id="id_username_helptext">Required. 150 characters or fewer.</div>
+                        <input type="text" name="username" class="input100" placeholder="Username" maxlength="150" required aria-describedby="id_username_helptext" id="id_username">
+                    </div>
+
+                    <div class="field_card">
+                        <label for="id_password">Password:</label>
+                        <input type="password" name="password" class="input100" placeholder="Password" required id="id_password">
+                    </div>
+                    <div class="forget-password">
+                        <a href="">Forgotten Password?</a>
+                    </div>
+                    <!-- <div class="text-center ">
+                        <a class="small text-info " href="{% url 'authentication:signup' %} ">Don't Have an Account?</a>
+                    </div>
+                    <div class="text-center ">
+                        <a class="small text-info " href="{{ settings.home.ImportantPages.page_url.home }} ">
+                        Home
+                    </a>
+                    </div> -->
+                    <input id="next" class="sign-up-button" type="submit" value="Login">
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+    {% endblock content %}
+</body>

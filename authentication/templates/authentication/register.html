@@ -1,0 +1,78 @@
+{% extends "base.html" %}{% load wagtailcore_tags %}{% load static %}{% load wagtailimages_tags %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="veiwpoint" content="width=device-widt, initial-scale=1.0"> {% block extra_styles%}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/register.css' %}">{% endblock %}
+</head>
+
+<body>
+    {% block content %}
+    <div class="main registration-page">
+        <div class="new" style="background: url({% static 'images/regis.jpg' %}); background-repeat: no-repeat; background-size: cover;">
+            {% include "header.html" %}
+            <h1>Register with us</h1>
+            <p>Step into a Sanctuary of Faith, Love, and Spiritual Growth</p>
+        </div>
+        <div class="com contact-us-container">
+            <div class="won">
+                <h2>
+                    Let us know a little more about you
+                </h2>
+                {{register_form.errors}}
+                <form action="{% url 'authentication:signup' %}" method="post" class="authentication_form">
+                    {% csrf_token %} {% for field in register_form %}
+                    <div class="fieldWrapper">
+                        {% if field.errors %}
+                        <ul>
+                            {% for error in field.errors %}
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                {{error|escape}}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    <div class="field_card">
+                        <label for="id_username">Username:</label>
+                        <div class="helptext" id="id_username_helptext">Required. 150 characters or fewer.</div>
+                        <input type="text" name="username" name="username" class="input100" placeholder="Username" maxlength="150" required aria-describedby="id_username_helptext" id="id_username">
+                    </div>
+                    <div class="field_card">
+                        <label for="id_email">Email:</label>
+                        <div class="helptext" id="id_email_helptext">Required. Input a valid email address.</div>
+                        <input type="email" name="email" name="email" class="input100" placeholder="Email" maxlength="254" required aria-describedby="id_email_helptext" id="id_email">
+                    </div>
+                    <div class="field_card">
+                        <label for="id_password1">Password:</label>
+                        <input type="password" name="password1" name="password" class="input100" placeholder="Password" required id="id_password1">
+                    </div>
+                    <div class="field_card">
+                        <label for="id_password2">Confirm Password:</label>
+                        <div class="helptext" id="id_password2_helptext">Enter the same password as before, for verification.</div>
+                        <input type="password" name="password2" name="Confirm Password" class="input100" placeholder="Confirm Password" required aria-describedby="id_password2_helptext" id="id_password2">
+                    </div>
+                    <div class="field_card">
+                        <label for="id_status">Status:</label>
+                        <select name="status" id="id_status">
+                            <option value="Worker">Worker</option>
+                            <option value="New Convert">New Convert</option>
+                            <option value="Member">Member</option> 
+                        </select>
+                    </div>
+                    <input id="next" class="sign-up-button" type="submit" value="SIGN UP">
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+
+</html>

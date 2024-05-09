@@ -1,0 +1,67 @@
+<div data-w-id="cc6e4718-ba15-402c-9595-d69fba7a0cda" class="hide-filter-bar">
+    <div class="icon">filter_alt_off</div>
+    <div>Hide Filter</div>
+</div>
+<div class="sidebar-form">
+    <div class="sidebar-wrapper">
+        <form action="/search" class="search w-form">
+            <input class="sidebar-search-input w-input" maxlength="256" name="query" placeholder="Search…" type="search" id="search-3" required=""/>
+            <input type="submit" class="sidebar-search-button w-button" value="search"/>
+        </form>
+        <div class="w-layout-vflex _10px-gap">
+            <div class="_20px-bold-title">Show all categories</div>
+            <div class="full-width">
+                <div class="widget">
+                    <div class="checkbox-field">
+                        <a href="/" aria-current="page" class="checkbox w-inline-block w--current"></a>
+                        <div class="paragraph-300">All</div>
+                    </div>
+                    <div class="w-dyn-list">
+                        <div role="list" class="product-categories w-dyn-items">
+                            {% if categories %}
+                            {% for cat in categories %}
+                            <div role="listitem" class="w-dyn-item">
+                                <div class="checkbox-field">
+                                    <a href="{% url 'shop:category' cat.slug %}" class="checkbox w-inline-block" onclick="setCurrent(this)"></a>
+                                    <div class="paragraph-300">{{cat.category_name|title}}</div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+                            <script>
+                                function setCurrent(ele) {
+                                    ele.setAttribute('aria-current', 'page')
+                                }
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="w-layout-vflex _10px-gap">
+            <div class="_20px-bold-title">Widget Price Filter</div>
+            <div class="full-width w-dyn-list">
+                <div role="list" class="widget w-dyn-items">
+                    <div role="listitem" class="w-dyn-item">
+                        <div class="checkbox-field">
+                            <a href="/price-range/1---100" class="checkbox w-inline-block"></a>
+                            <div class="paragraph-300">$1 - $100</div>
+                        </div>
+                    </div>
+                    <div role="listitem" class="w-dyn-item">
+                        <div class="checkbox-field">
+                            <a href="/price-range/101---200" class="checkbox w-inline-block"></a>
+                            <div class="paragraph-300">$101 - $200</div>
+                        </div>
+                    </div>
+                    <div role="listitem" class="w-dyn-item">
+                        <div class="checkbox-field">
+                            <a href="/price-range/201---300" class="checkbox w-inline-block"></a>
+                            <div class="paragraph-300">$201 - $300</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,10 @@
+{% extends "wagtailusers/users/edit.html" %} {% block extra_fields %}
+<li>{% include "wagtailadmin/shared/field.html" with field=form.country %}</li>
+<li>{% include "wagtailadmin/shared/field.html" with field=form.status %}</li>
+<li>{% include "wagtailadmin/shared/field.html" with field=form.region %}</li>
+<li>{% include "wagtailadmin/shared/field.html" with field=form.gender %}</li>
+<li>{% include "wagtailadmin/shared/field.html" with field=form.phone_number %}</li>
+<li>{% include "wagtailadmin/shared/field.html" with field=form.residential_address %}</li>
+<li>{% include "wagtailadmin/shared/field.html" with field=form.date_of_birth %}</li>
+<li>{% include "wagtailadmin/shared/field.html" with field=form.avatar %}</li>
+{% endblock extra_fields %}

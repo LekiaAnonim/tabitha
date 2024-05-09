@@ -1,0 +1,20 @@
+{% extends 'base.html' %} {% load i18n %} {% block content %}
+<div class="display-sign-container batch-container login-container" style="z-index: 1000;">
+    <div class="sign-up-container">
+        <div class="sign-up-card">
+            <h5>Activation link is invalid!.</h5>
+        </div>
+    </div>
+    <div class="card text-center">
+        <div class="card-header">
+            Invalid Link
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Activation link is invalid!.</h5>
+            <p class="card-text"><span>Note:</span> Please, kindly go ahead and login.</p>
+            <a href="{% url 'authentication:login' %}" class="btn btn-primary">Login</a>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
