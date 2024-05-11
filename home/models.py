@@ -204,6 +204,7 @@ class SiteContact(BaseSiteSetting):
     email1 = models.EmailField(help_text='Your Email address', null=True, blank=True)
     address = models.CharField(max_length=500, null=True, blank=True)
     phone2 = models.CharField(max_length=500, null=True, blank=True)
+    google_map_url  = models.URLField(max_length=1000, null=True, blank=True, help_text="Enter the google map iframe embed src link")
 
 @register_setting
 class SiteLogo(BaseSiteSetting):
