@@ -9,6 +9,7 @@ from wagtail.snippets.models import register_snippet
 from modelcluster.fields import ParentalKey
 from wagtail.contrib.forms.panels import FormSubmissionsPanel
 from cloudinary.models import CloudinaryField
+from shop.models import Category, Cart
 
 
 class HomePage(Page):
@@ -87,8 +88,8 @@ class SubscribeFormSettings(BaseSiteSetting):
 @register_snippet
 class OurValues(models.Model):
     value_title = models.CharField(max_length=500, null=True, blank=True)
-    value_text = models.URLField(null=True, blank=True)
-    value_image = CloudinaryField("image", null=True, blank=True)
+    value_text = RichTextField(null=True, blank=True)
+    value_image = CloudinaryField("image", null=True, blank=True, help_text="upload image")
 
     panels = [
         FieldPanel('value_title'),
@@ -100,25 +101,92 @@ class OurValues(models.Model):
     
     class Meta:
         verbose_name_plural = "Our Values"
+
+@register_snippet
+class TrustedBy(models.Model):
+    organization_name = models.CharField(max_length=500, null=True, blank=True)
+    logo = CloudinaryField("image", null=True, blank=True, help_text="upload logo of trusted-by companies/businesses")
+
+    panels = [
+        FieldPanel('organization_name'),
+        FieldPanel('logo'),
+    ]
+    def __str__(self):
+        return self.organization_name
+    
+    class Meta:
+        verbose_name_plural = "Trusted By Businesses"
+
+@register_snippet
+class Team(models.Model):
+    full_name = models.CharField(max_length=500, null=True, blank=True)
+    position = models.URLField(null=True, blank=True)
+    photo = CloudinaryField("image", null=True, blank=True, help_text="upload photo")
+    facebook = models.URLField(null=True, blank=True)
+    twitter = models.URLField(null=True, blank=True)
+    instagram = models.URLField(null=True, blank=True)
+    linkedin = models.URLField(null=True, blank=True)
+    whatsapp = models.URLField(null=True, blank=True)
+
+    panels = [
+        FieldPanel('full_name'),
+        FieldPanel('position'),
+        FieldPanel('photo'),
+        FieldPanel('facebook'),
+        FieldPanel('twitter'),
+        FieldPanel('instagram'),
+        FieldPanel('linkedin'),
+        FieldPanel('whatsapp'),
+    ]
+    def __str__(self):
+        return self.full_name
+    
+    class Meta:
+        verbose_name_plural = "Teams"
     
 class About(Page):
     max_count = 1
-    template = 'home/About.html'
+    template = 'home/about.html'
     welcome_to_tabitha_title = models.CharField(max_length=1000, null=True, blank=True)
     welcome_to_tabitha_text = RichTextField(null=True, blank=True)
     our_mission_title = models.CharField(max_length=1000, null=True, blank=True)
     our_mission_text = RichTextField(null=True, blank=True)
+    our_mission_image = CloudinaryField("image", null=True, blank=True, help_text="upload image for Mission section")
     our_story_title = models.CharField(max_length=1000, null=True, blank=True)
     our_story_text = RichTextField(null=True, blank=True)
+    our_story_image1 = CloudinaryField("image", null=True, blank=True, help_text="upload first for Story section")
+    our_story_image2 = CloudinaryField("image", null=True, blank=True, help_text="upload second for Story section")
 
     content_panels = Page.content_panels + [
         FieldPanel('welcome_to_tabitha_title'),
         FieldPanel('welcome_to_tabitha_text'),
         FieldPanel('our_mission_title'),
         FieldPanel('our_mission_text'),
+        FieldPanel('our_mission_image'),
         FieldPanel('our_story_title'),
         FieldPanel('our_story_text'),
+        FieldPanel('our_story_image1'),
+        FieldPanel('our_story_image2'),
     ]
+
+    def get_context(self, request, *args, **kwargs):
+        context = super(About, self).get_context(request, *args, **kwargs)
+
+        categories = Category.objects.all()
+        cart = Cart.objects.get_or_create(user=request.user)[0]
+        cart_items = cart.cartitem_set.all()
+
+        values = OurValues.objects.all()
+        teams = Team.objects.all()
+        trusted_by_companies = TrustedBy.objects.all()
+
+        context['cart_items'] = cart_items
+        context['categories'] = categories
+        context['values'] = values
+        context['teams'] = teams
+        context['cart'] = cart
+        context['trusted_by_companies'] = trusted_by_companies
+        return context
 
 @register_setting
 class SiteSocial(BaseSiteSetting):
@@ -139,27 +207,30 @@ class SiteContact(BaseSiteSetting):
 
 @register_setting
 class SiteLogo(BaseSiteSetting):
-    logo = CloudinaryField("image", null=True, blank=True)
+    logo = CloudinaryField("image", null=True, blank=True, help_text="Upload site logo")
 
 @register_setting
 class ImportantPages(BaseSiteSetting):
     # Fetch these pages when looking up ImportantPages for or a site
-    select_related = ["about", "home"]
+    select_related = ["about", "home", "contact"]
 
     about = models.ForeignKey(
         'wagtailcore.Page', null=True, on_delete=models.SET_NULL, related_name='+')
     home = models.ForeignKey(
         'wagtailcore.Page', null=True, on_delete=models.SET_NULL, related_name='+')
+    contact = models.ForeignKey(
+        'wagtailcore.Page', null=True, on_delete=models.SET_NULL, related_name='+')
     panels = [
         PageChooserPanel('about', ['home.About']),
         PageChooserPanel('home', ['home.HomePage']),
+        PageChooserPanel('contact', ['home.ContactFormPage']),
     ]
 
 class ContactFormField(AbstractFormField):
     page = ParentalKey('ContactFormPage', on_delete=models.CASCADE, related_name='form_fields')
 
 class ContactFormPage(AbstractEmailForm):
-    template = 'home/connect_form.html'
+    template = 'home/contact.html'
     intro = RichTextField(blank=True)
     thank_you_text = RichTextField(blank=True)
     content_panels = AbstractEmailForm.content_panels + [
@@ -202,6 +273,18 @@ class ContactFormPage(AbstractEmailForm):
             self.get_template(request),
             context
         )
+    
+    def get_context(self, request, *args, **kwargs):
+        context = super(ContactFormPage, self).get_context(request, *args, **kwargs)
+
+        categories = Category.objects.all()
+        cart = Cart.objects.get_or_create(user=request.user)[0]
+        cart_items = cart.cartitem_set.all()
+
+        context['cart_items'] = cart_items
+        context['categories'] = categories
+        context['cart'] = cart
+        return context
     
 @register_setting
 class ContactFormSettings(BaseSiteSetting):

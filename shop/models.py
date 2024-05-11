@@ -121,6 +121,10 @@ class Cart(models.Model):
         FieldPanel('user'),
         FieldPanel('items'),
     ]
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.user.username} {self.user.first_name}, {self.created_at}'
     
     def is_in_cart(self, product_id):
         """
@@ -181,6 +185,10 @@ class CartItem(models.Model):
         FieldPanel('quantity'),
     ]
 
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.cart}, {self.product}, {self.quantity}'
+
 @register_snippet   
 class Order(models.Model): 
     cart_item = models.ForeignKey(CartItem, 
@@ -206,6 +214,10 @@ class Order(models.Model):
         FieldPanel('date'),
         FieldPanel('status'),
     ]
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.customer.username} {self.customer.first_name}, {self.cart_item}, {self.quantity}, {self.price}'
   
     def placeOrder(self): 
         self.save() 

@@ -5,7 +5,7 @@ import cloudinary
 DEBUG = True
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-*@v76v@zugliky3^8s4qht%+1zno*%#4r2foeh3sng2qft-a!a"
+
 
 # SECURITY WARNING: define the correct hosts in production!
 ALLOWED_HOSTS = ["*"]

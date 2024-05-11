@@ -1,3 +1,4 @@
+{% load wagtailcore_tags %}{% load static %}{% load wagtailimages_tags %}
 <footer id="footer" class="footer">
     <div class="container">
         <div class="newsletter-block">
@@ -8,10 +9,7 @@
                 </p>
             </div>
             <div class="subscription-form-block w-form">
-                <form id="wf-form-Newsletter" name="wf-form-Newsletter" data-name="Newsletter" method="get" class="subscription-form" data-wf-page-id="65f2c446b3b822983c0612d0" data-wf-element-id="afe980d4-4bd0-ae5d-3998-039e387aa004">
-                    <input class="subscription-mail-input w-input" maxlength="256" name="Newsletter-Email" data-name="Newsletter Email" placeholder="You Email" type="email" id="Newsletter-Email" required=""/>
-                    <input type="submit" data-wait="Please wait..." class="subscription-button w-button" value="Subscribe"/>
-                </form>
+                {% include 'home/subscribe_form.html' %}
                 <div class="message-sent-notification w-form-done">
                     <div>Thank you! Your submission has been received!</div>
                 </div>
@@ -25,31 +23,31 @@
         <div class="container">
             <div class="footer-wrapper">
                 <div class="footer-block first-block">
-                    <a href="#" class="navbar-logo-wrapper w-nav-brand">
-                        <img src="https://assets-global.website-files.com/65f0219f664a58453bb579a5/65f127a7e7e25afdb33b14d2_Logo.webp" loading="lazy" width="70" alt="" class="site-logo"/>
+                    <a href="/" class="navbar-logo-wrapper w-nav-brand">
+                        <img src="{% static 'images/tabithastore_logo.jpg' %}" loading="lazy" width="70" alt="" class="site-logo"/>
                     </a>
-                    <p class="footer-paragraph">At Ecommerce TNC, we curate diverse, quality products ensuring a stress-free shopping experience. Our dedicated team provides prompt support. Join our community.</p>
+                    <p class="footer-paragraph">At Tabitha, we curate diverse, quality products ensuring a stress-free shopping experience. Our dedicated team provides prompt support. Join our community.</p>
                     <div class="social-share-icon-container">
-                        <a href="https://www.facebook.com/ThemeNcode/" target="_blank" class="footer-social-icon"></a>
-                        <a href="https://www.instagram.com/themencode_com/" target="_blank" class="footer-social-icon"></a>
-                        <a href="https://twitter.com/ThemeNcode" target="_blank" class="footer-social-icon"></a>
-                        <a href="https://www.instagram.com/themencode_com/" target="_blank" class="footer-social-icon"></a>
+                        {% if settings.home.SiteSocial.facebook %}
+                        <a href="{{settings.home.SiteSocial.facebook}}" target="_blank" class="footer-social-icon"></a>
+                        {% endif %}
+                        {% if settings.home.SiteSocial.instagram %}
+                        <a href="{{settings.home.SiteSocial.instagram}}" target="_blank" class="footer-social-icon"></a>
+                        {% endif %}
+                        {% if settings.home.SiteSocial.twitter %}
+                        <a href="{{settings.home.SiteSocial.twitter}}" target="_blank" class="footer-social-icon"></a>
+                        {% endif %}
+                        {% if settings.home.SiteSocial.youtube %}
+                        <a href="{{settings.home.SiteSocial.youtube}}" target="_blank" class="footer-social-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: #8f9eb2;transform: ;msFilter:;"><path d="M21.593 7.203a2.506 2.506 0 0 0-1.762-1.766C18.265 5.007 12 5 12 5s-6.264-.007-7.831.404a2.56 2.56 0 0 0-1.766 1.778c-.413 1.566-.417 4.814-.417 4.814s-.004 3.264.406 4.814c.23.857.905 1.534 1.763 1.765 1.582.43 7.83.437 7.83.437s6.265.007 7.831-.403a2.515 2.515 0 0 0 1.767-1.763c.414-1.565.417-4.812.417-4.812s.02-3.265-.407-4.831zM9.996 15.005l.005-6 5.207 3.005-5.212 2.995z"></path></svg></a>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="footer-block">
                     <div class="footer-title">Useful Links</div>
                     <div class="list-block">
-                        <a href="/home" class="footer-link w-inline-block">
+                        <a href="/" class="footer-link w-inline-block">
                             <div class="footer-link-icon">chevron_right</div>
-                            <div>Home One</div>
-                        </a>
-                        <a href="/home-2" class="footer-link w-inline-block">
-                            <div class="footer-link-icon">chevron_right</div>
-                            <div>Home Two</div>
-                        </a>
-                        <a href="/home-3" class="footer-link w-inline-block">
-                            <div class="footer-link-icon">chevron_right</div>
-                            <div>Home Three</div>
+                            <div>Home</div>
                         </a>
                         <a href="/about" class="footer-link w-inline-block">
                             <div class="footer-link-icon">chevron_right</div>
@@ -72,7 +70,7 @@
                             <div class="footer-link-icon">chevron_right</div>
                             <div>FAQ</div>
                         </a>
-                        <a href="/shop" aria-current="page" class="footer-link w-inline-block w--current">
+                        <a href="/" aria-current="page" class="footer-link w-inline-block w--current">
                             <div class="footer-link-icon">chevron_right</div>
                             <div>Shop</div>
                         </a>
@@ -89,18 +87,14 @@
                 <div class="footer-menu-links-wrapper"></div>
                 <div class="footer-block subscribe-block">
                     <div class="footer-title">Contact Address</div>
-                    <p class="footer-paragraph">
-                        4517 Washington Ave. Manchester,<br/>Kentucky 39495
-                    </p>
+                    <address class="footer-paragraph">
+                        {{ settings.home.SiteContact.address }}
+                    </address>
                     <div class="w-layout-vflex _10px-gap">
                         <div class="footer-title">Contact Address</div>
                         <div class="horizontal-block-10px-gap">
                             <img src="https://assets-global.website-files.com/65f0219f664a58453bb579a5/65f13c13f60edff8333303ba_phone-call%201.svg" loading="lazy" alt="" class="_16px-svg"/>
-                            <div class="paragraph-300">(123) 555-0119</div>
-                        </div>
-                        <div class="horizontal-block-10px-gap">
-                            <img src="https://assets-global.website-files.com/65f0219f664a58453bb579a5/65f13c1371255e3999942adf_email%201.svg" loading="lazy" alt="" class="_16px-svg"/>
-                            <div class="paragraph-300">(123) 555-0119</div>
+                            <div class="paragraph-300"><a href="tel:+{{ settings.home.SiteContact.phone2 }}">{{ settings.home.SiteContact.phone2 }}</a></div>
                         </div>
                     </div>
                 </div>

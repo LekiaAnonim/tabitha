@@ -1,0 +1,21 @@
+{% extends 'home/base.html' %}{% load wagtailcore_tags %}{% load static %}{% load wagtailimages_tags %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="veiwpoint" content="width=device-widt, initial-scale=1.0" />
+</head> 
+{% block sidebar %} 
+{% endblock %}
+{% block content %}
+<div class="display-sign-container batch-container login-container" style="z-index: 1000;">
+    <div class="card text-center">
+        <div class="card-body">
+            <h5 class="card-title">You have Successfully subscribe to our newsletter.</h5>
+            <p class="card-text">{{page.thank_you_text|richtext}}.</p>
+            <a href="/" class="btn btn-primary successful-home">Home</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}
