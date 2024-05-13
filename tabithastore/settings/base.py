@@ -152,6 +152,9 @@ STATIC_URL = "/static/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 
+# Login redirect url
+LOGIN_URL = 'authentication:login'
+
 # Default storage settings, with the staticfiles storage updated.
 # See https://docs.djangoproject.com/en/5.0/ref/settings/#std-setting-STORAGES
 STORAGES = {

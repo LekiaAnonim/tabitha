@@ -1,0 +1,29 @@
+{% extends 'home/base.html' %}{% load wagtailcore_tags %}{% load static %}{% load wagtailimages_tags %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="veiwpoint" content="width=device-widt, initial-scale=1.0" />
+    {% block extra_styles%}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/landing.css' %}">
+    {% endblock %}
+    
+</head> 
+{% block sidebar %} 
+{% endblock %}
+{% block content %}
+
+<div class="display-sign-container batch-container login-container" style="z-index: 1000; width: 100%;">
+    <div class="card text-center" style="width: 100% !important; max-width: 100% !important;">
+        <div class="card-body" style="width: 100% !important; max-width: 100% !important;">
+            <h5 class="card-title">Your message has been received. We will reach out to you shortly</h5>
+            <p style="text-align: center; width: 100% !important; max-width: 100% !important;">{{page.thank_you_text|richtext}}.</p>
+            <a href="/" class="btn btn-primary successful-home">Home</a>
+        </div>
+        <div class="card-footer text-muted">
+            Check your email inbox or spam for a confirmation email.
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,11 +1,11 @@
-{% extends 'courses/base.html' %} {% load wagtailcore_tags %} {% load static %} {% load wagtailimages_tags %}
+{% load wagtailcore_tags %} {% load static %} {% load wagtailimages_tags %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">{% block title %}
-    <title>Update Profile</title>{% endblock %}
+    <title>Account Update</title>{% endblock %}
 
 </head>
 
@@ -43,32 +43,12 @@
                             <input class="form-control" type="text" name="region" value="{{form.region.value}}" maxlength="255" required id="id_region">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="id_gender">Gender:</label>
-                            <select class="form-select" aria-label="Default select example" name="gender" required id="id_gender">
-                                <option value="">---------</option>
-                                <option value="1" selected>Male</option>
-                                <option value="2">Female</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="id_status">Status:</label>
-                            <select class="form-select" aria-label="Default select example" name="status" id="id_status">
-                                <option value="Worker" selected>Worker</option>
-                                <option value="New Convert">New Convert</option>
-                                <option value="Member">Member</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
                             <label class="form-label" for="id_phone_number">Phone number:</label>
                             <input class="form-control" type="text" name="phone_number" value="{{form.phone_number.value}}" maxlength="255" required id="id_phone_number">
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="id_residential_address">Residential address:</label>
                             <input class="form-control" type="text" name="residential_address" value="{{form.residential_address.value}}" maxlength="255" required id="id_residential_address">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="id_date_of_birth">Date of birth:</label>
-                            <input class="form-control" type="text" name="date_of_birth" value="{{form.date_of_birth.value}}" required id="id_date_of_birth">
                         </div>
                         <div class="mb-3">
                             <label for="id_avatar">Avatar:</label>

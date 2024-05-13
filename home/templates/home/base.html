@@ -72,11 +72,26 @@
         {% endblock %}
 
         <div class="page-wrapper">
+            {% block messages %} {% if messages %} {% for message in messages %}
+            <div class="message-alert">
+                {% if message.level_tag == 'error' %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div> {% else %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div> {% endif %}
+            </div>
+            {% endfor %} {% endif %} {% endblock messages %}
             <section class="section">
-                <div class="container _2-column-container"> 
+
+                <div class="container _2-column-container">
                     {% block sidebar %} 
                     {% include "home/components/left-sidebar.html" %}
                     {% endblock %}
+                    
                     {% block content %}{% endblock %}
                 </div>
             </section>

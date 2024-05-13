@@ -38,7 +38,7 @@ class UserDetail(LoginRequiredMixin, DetailView):
     redirect_field_name = "redirect_to"
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
-    fields = ['username', 'first_name', 'last_name', 'email', 'country', 'region', 'gender', 'status', 'phone_number', 'residential_address', 'date_of_birth', 'avatar']
+    fields = ['username', 'first_name', 'last_name', 'email', 'country', 'region', 'phone_number', 'residential_address', 'avatar']
     model = Member
     template_name = 'authentication/user_update.html'
     login_url = "authentication:login"
@@ -67,7 +67,7 @@ class UserLoginView(View):
             messages.success(request, f"Login Successful ! "
                                 f"Welcome {user.username}.")
             
-            return redirect('authentication:member_profile', user.id)
+            return redirect('shop:home')
 
         else:
             messages.error(request,

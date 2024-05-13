@@ -6,6 +6,8 @@ from shop.models import Category
 from django.views import View 
 from django.views.generic import TemplateView, ListView, DetailView
 from authentication.models import User
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 # Create your views here.
 def get_products_in_cart(cart):
@@ -30,6 +32,7 @@ class ShopView(ListView):
         context['products'] = products
         return context
 	
+    @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         
         action = request.POST.get('action')
@@ -64,12 +67,16 @@ class ShopView(ListView):
         categories = Category.objects.all()
         products = ProductPage.objects.all().order_by('first_published_at').order_by('-id')
 
-        cart = Cart.objects.get_or_create(user=request.user)[0]
-        cart_items = cart.cartitem_set.all()
-        cart_products = get_products_in_cart(cart)
+        if request.user.is_authenticated:
+            cart = Cart.objects.get_or_create(user=request.user)[0]
+            cart_items = cart.cartitem_set.all()
+            context['cart_items'] = cart_items
+        else:
+            cart = None
+        # cart_products = get_products_in_cart(cart)
         
-        context['cart_products'] = cart_products
-        context['cart_items'] = cart_items
+        # context['cart_products'] = cart_products
+        # context['cart_items'] = cart_items
         context['categories'] = categories
         context['products'] = products
         context['cart'] = cart
@@ -82,9 +89,9 @@ class CategoryProductView(ListView):
     context_object_name = 'categories'
     paginate_by = 12
 	
-    def get_queryset(self):
-        category = get_object_or_404(Category, slug=self.kwargs.get('slug'))
-        return ProductPage.objects.filter(category=category).order_by('first_published_at').order_by('-id')
+    # def get_queryset(self):
+    #     category = get_object_or_404(Category, slug=self.kwargs.get('slug'))
+    #     return ProductPage.objects.filter(category=category).order_by('first_published_at').order_by('-id')
     
     def get_context_data(self, *args, **kwargs):
         context = super(CategoryProductView, self).get_context_data(**kwargs)
@@ -99,6 +106,52 @@ class CategoryProductView(ListView):
         context['categories'] = categories
         context['products'] = products
         return context
+    
+    @login_required
+    def post(self, request, *args, **kwargs):
+        
+        action = request.POST.get('action')
+        cart, _ = Cart.objects.get_or_create(user=request.user)
+        
+        if action == 'add':
+            product_id = int(request.POST.get('product'))
+            product = get_object_or_404(ProductPage, pk=product_id)
+            cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+            if not created:
+                cart_item.quantity += 1
+                cart_item.save()
+        elif action == 'remove':
+            if cart.is_in_cart(product_id):
+                cart_item = get_object_or_404(CartItem, cart=cart, product=product)
+                cart_item.delete()
+        elif action == 'update':
+            product_id = int(request.POST.get('cart_product'))
+            product = get_object_or_404(ProductPage, pk=product_id)
+            cart_item = get_object_or_404(CartItem, cart=cart, product=product)
+            new_quantity = int(request.POST.get('cart_quantity', 0))
+            if new_quantity <= 0:
+                cart_item.delete()
+            else:
+                cart_item.quantity = new_quantity
+                cart_item.save()
+        return redirect('shop:home')
+    
+    def get(self , request, *args, **kwargs):
+        self.object_list = self.get_queryset()
+        context = super().get_context_data(**kwargs)
+        categories = Category.objects.all()
+        if request.user.is_authenticated:
+            cart = Cart.objects.get_or_create(user=request.user)[0]
+            cart_items = cart.cartitem_set.all()
+            context['cart_items'] = cart_items
+        else:
+            cart = None
+        
+
+        
+        context['categories'] = categories
+        context['cart'] = cart
+        return render(request, self.template_name, context)
 	
 
 class CheckOut(TemplateView):
@@ -139,12 +192,16 @@ class CheckOut(TemplateView):
     def get(self , request, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         categories = Category.objects.all()
-        cart = Cart.objects.get_or_create(user=request.user)[0]
-        cart_items = cart.cartitem_set.all()
+        if request.user.is_authenticated:
+            cart = Cart.objects.get_or_create(user=request.user)[0]
+            cart_items = cart.cartitem_set.all()
+            context['cart_items'] = cart_items
+        else:
+            cart = None
         cart_products = get_products_in_cart(cart)
         
         context['cart_products'] = cart_products
-        context['cart_items'] = cart_items
+        # context['cart_items'] = cart_items
         context['categories'] = categories
         context['cart'] = cart
         return render(request, self.template_name, context)
@@ -180,10 +237,14 @@ class UserAccountView(TemplateView):
     def get(self , request, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         categories = Category.objects.all()
-        cart = Cart.objects.get_or_create(user=request.user)[0]
-        cart_items = cart.cartitem_set.all()
+        if request.user.is_authenticated:
+            cart = Cart.objects.get_or_create(user=request.user)[0]
+            cart_items = cart.cartitem_set.all()
+            context['cart_items'] = cart_items
+        else:
+            cart = None
 
-        context['cart_items'] = cart_items
+        # context['cart_items'] = cart_items
         context['categories'] = categories
         context['cart'] = cart
         return render(request, self.template_name, context)

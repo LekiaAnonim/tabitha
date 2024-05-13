@@ -19,4 +19,4 @@ class User(AbstractUser):
     avatar = CloudinaryField("image", null=True, blank=True)
 
     def get_absolute_url(self):
-        return reverse('authentication:member_profile', kwargs={'pk': self.pk})
+        return reverse('shop:account')

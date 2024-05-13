@@ -37,6 +37,19 @@
     </head>
     <body>
         {% include "home/components/header.html" %}
+        {% block messages %} {% if messages %} {% for message in messages %}
+        <div class="message-alert">
+            {% if message.level_tag == 'error' %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div> {% else %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div> {% endif %}
+        </div>
+        {% endfor %} {% endif %} {% endblock messages %}
         <div class="page-wrapper">
             <section class="section">
                 <div class="container">
