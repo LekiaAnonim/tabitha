@@ -8,7 +8,7 @@
         <title>{% block title %}
             {% if self.seo_title %}
             {{ self.seo_title }}
-            {% elif %}
+            {% elif self.title %}
             {{ self.title }}
             {% else %}
             {{ self.product_name }}
