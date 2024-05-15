@@ -1,0 +1,19 @@
+{% extends "home/base.html" %}{% load wagtailcore_tags %}{% load static %}{% load wagtailimages_tags %}
+<!DOCTYPE html>
+<html>
+<head>
+    {% block title %}
+    Thanks for your order!
+    {% endblock %}
+</head>
+<body>
+    {% block sidebar %} 
+    {% endblock %}
+    <section>
+    <p>
+        We appreciate your business! If you have any questions, please email
+        <a href="mailto:{{ settings.home.SiteContact.email1 }}">{{ settings.home.SiteContact.email1 }}</a>.
+    </p>
+    </section>
+</body>
+</html>

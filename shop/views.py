@@ -197,7 +197,7 @@ class CheckOut(TemplateView):
         else:
             total_amount = sum(item.product.original_price * item.quantity for item in cart_items)
 
-        domain_url = 'http://localhost:8000/'
+        domain_url = settings.WAGTAILADMIN_BASE_URL
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
             # Create new Checkout Session for the order
@@ -211,12 +211,11 @@ class CheckOut(TemplateView):
             # ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
             checkout_session = stripe.checkout.Session.create(
                 success_url=domain_url + 'success?session_id={CHECKOUT_SESSION_ID}',
-                cancel_url=domain_url + 'cancelled/',
+                cancel_url=domain_url + 'cancel/',
                 payment_method_types=['card'],
                 mode='payment',
                 currency= "usd",
                 customer_email = customer.email,
-                # quantity = int(total_amount*100),
                 line_items=[
                     
                     {
@@ -261,7 +260,13 @@ class CheckOut(TemplateView):
         context['categories'] = categories
         context['cart'] = cart
         return render(request, self.template_name, context)
-    
+
+class SuccessView(TemplateView):
+    template_name = 'shop/success.html'
+
+
+class CancelledView(TemplateView):
+    template_name = 'shop/cancel.html'
 class UserAccountView(LoginRequiredMixin, TemplateView):
     template_name = 'home/user-account.html'
     login_url = "authentication:login"
