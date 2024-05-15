@@ -1,5 +1,5 @@
-{% load static wagtailcore_tags %} {% load static %} {% load subscribe_form %} {% get_subscribe_form as form %}
-<form action="{% pageurl form.page %}" method="post" class="subscription-form">
+{% load static wagtailcore_tags %} {% load static %}
+<form action="" method="post" class="subscription-form">
     {% csrf_token %}
     <input class="subscription-mail-input w-input" maxlength="256" name="email" placeholder="Your Email" type="email" id="id_email" required/>
     <input type="submit" data-wait="Please wait..." class="subscription-button w-button" value="Subscribe"/>
