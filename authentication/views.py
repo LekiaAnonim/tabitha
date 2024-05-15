@@ -38,7 +38,7 @@ class UserDetail(LoginRequiredMixin, DetailView):
     redirect_field_name = "redirect_to"
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
-    fields = ['username', 'first_name', 'last_name', 'email', 'country', 'region', 'phone_number', 'residential_address', 'avatar']
+    fields = ['username', 'first_name', 'last_name', 'email', 'country', 'region', 'city', 'phone_number', 'residential_address', 'avatar']
     model = Member
     template_name = 'authentication/user_update.html'
     login_url = "authentication:login"

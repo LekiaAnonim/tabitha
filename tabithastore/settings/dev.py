@@ -13,11 +13,15 @@ ALLOWED_HOSTS = ["*"]
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 
+
+# Configuration       
 cloudinary.config( 
-  cloud_name = "dum5thngj", 
-  api_key = "649654183492732", 
-  api_secret = "DnhztD3mYzhHh33lb_rpJY8s7BE" 
+    cloud_name = "dlmcid90b", 
+    api_key = "973926521247783", 
+    api_secret = "iVA9j63HTBzTpwiR5k34cLujc8k", # Click 'View Credentials' below to copy your API secret
+    secure=True
 )
+
 
 
 try:

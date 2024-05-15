@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 from pathlib import Path
+import dj_database_url
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -143,10 +144,14 @@ DATABASES = {
     }
 }
 
+DATABASES = {
+    "default": dj_database_url.config(default='postgresql://postgres:ahIqKfzBySzaLVsvslanSonTdolfrcSk@roundhouse.proxy.rlwy.net:45675/railway', conn_max_age=1800),
+}
+
 AUTH_USER_MODEL = 'authentication.User'
 WAGTAIL_USER_EDIT_FORM = 'authentication.forms.CustomUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'authentication.forms.CustomUserCreationForm'
-WAGTAIL_USER_CUSTOM_FIELDS = ['country', 'phone_number', 'region', 'residential_address', 'avatar']
+WAGTAIL_USER_CUSTOM_FIELDS = ['country', 'city', 'phone_number', 'region', 'residential_address', 'avatar']
 
 
 # Password validation

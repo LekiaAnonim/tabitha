@@ -61,6 +61,7 @@ class UserRegisterForm(UserCreationForm):
 class CustomUserEditForm(UserEditForm):
     country = forms.CharField(required=False, label=_("Country"))
     region = forms.CharField(required=False, label=_("State"))
+    city = forms.CharField(required=False, label=_("City"))
     phone_number = forms.CharField(required=False, label=_("Phone number"))
     residential_address = forms.CharField(required=False, label=_("Residential address"))
     avatar = forms.ImageField(required=False, label=_("Avatar"))
@@ -69,6 +70,7 @@ class CustomUserEditForm(UserEditForm):
 class CustomUserCreationForm(UserCreationForm):
     country = forms.CharField(required=False, label=_("Country"))
     region = forms.CharField(required=False, label=_("State"))
+    city = forms.CharField(required=False, label=_("City"))
     phone_number = forms.CharField(required=False, label=_("Phone number"))
     residential_address = forms.CharField(required=False, label=_("Residential address"))
     avatar = forms.ImageField(required=False, label=_("Avatar"))
