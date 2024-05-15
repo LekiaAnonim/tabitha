@@ -13,8 +13,8 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # djangostripe/settings.py
 
-STRIPE_PUBLISHABLE_KEY = os.environ['STRIPE_PUBLISHABLE_KEY']
-STRIPE_SECRET_KEY = os.environ['STRIPE_SECRET_KEY']
+STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
 
 # Provider specific settings
 SOCIALACCOUNT_PROVIDERS = {
@@ -24,8 +24,8 @@ SOCIALACCOUNT_PROVIDERS = {
             'email'
         ],
         'APP': {
-            'client_id': os.environ['CLIENT_ID'],
-            'secret': os.environ['CLIENT_SECRET'],
+            'client_id': os.getenv('CLIENT_ID'),
+            'secret': os.getenv('CLIENT_SECRET'),
             'key': ''
         },
         'AUTH_PARAMS': {
