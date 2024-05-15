@@ -154,6 +154,23 @@ WAGTAIL_USER_CREATION_FORM = 'authentication.forms.CustomUserCreationForm'
 WAGTAIL_USER_CUSTOM_FIELDS = ['country', 'city', 'phone_number', 'region', 'residential_address', 'avatar']
 
 
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://web-production-4f0f.up.railway.app', 'https://tabitha.market', 'https://www.tabitha.market', 'http://tabitha.market']
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'http')
+CSRF_USE_SESSIONS = False
+CSRF_COOKIE_SECURE = True
+SECURE_BROWSER_XSS_FILTER = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_FRAME_DENY = True
+SECURE_HSTS_SECONDS = 2592000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+SECURE_REFERRER_POLICY = 'same-origin'
+
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 

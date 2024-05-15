@@ -7,6 +7,7 @@ env = environ.Env(
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 DEBUG = env('DEBUG')
 
+ALLOWED_HOST = ['*']
 
 # djangostripe/settings.py
 
