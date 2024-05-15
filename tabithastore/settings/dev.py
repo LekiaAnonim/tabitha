@@ -1,5 +1,4 @@
 from .base import *
-import cloudinary
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -12,15 +11,29 @@ ALLOWED_HOSTS = ["*"]
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
+# djangostripe/settings.py
 
+STRIPE_PUBLISHABLE_KEY = os.environ['STRIPE_PUBLISHABLE_KEY']
+STRIPE_SECRET_KEY = os.environ['STRIPE_SECRET_KEY']
 
-# Configuration       
-cloudinary.config( 
-    cloud_name = "dlmcid90b", 
-    api_key = "973926521247783", 
-    api_secret = "iVA9j63HTBzTpwiR5k34cLujc8k", # Click 'View Credentials' below to copy your API secret
-    secure=True
-)
+# Provider specific settings
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE' : [
+            'profile',
+            'email'
+        ],
+        'APP': {
+            'client_id': os.environ['CLIENT_ID'],
+            'secret': os.environ['CLIENT_SECRET'],
+            'key': ''
+        },
+        'AUTH_PARAMS': {
+            'access_type':'online',
+        }
+    }
+}
+
 
 
 

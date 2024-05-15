@@ -15,6 +15,7 @@ import os
 from pathlib import Path
 import dj_database_url
 from dotenv import load_dotenv
+import cloudinary
 
 load_dotenv()
 from django.core.management.utils import get_random_secret_key
@@ -64,10 +65,7 @@ INSTALLED_APPS = [
 
 SITE_ID = 2
 
-# djangostripe/settings.py
 
-STRIPE_PUBLISHABLE_KEY = os.environ['STRIPE_PUBLISHABLE_KEY']
-STRIPE_SECRET_KEY = os.environ['STRIPE_SECRET_KEY']
 
 MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -84,23 +82,7 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
 ]
 
-# Provider specific settings
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE' : [
-            'profile',
-            'email'
-        ],
-        'APP': {
-            'client_id': os.environ['CLIENT_ID'],
-            'secret': os.environ['CLIENT_SECRET'],
-            'key': ''
-        },
-        'AUTH_PARAMS': {
-            'access_type':'online',
-        }
-    }
-}
+
 
 ROOT_URLCONF = "tabithastore.urls"
 
@@ -147,6 +129,15 @@ WSGI_APPLICATION = "tabithastore.wsgi.application"
 DATABASES = {
     "default": dj_database_url.config(default='postgresql://postgres:ahIqKfzBySzaLVsvslanSonTdolfrcSk@roundhouse.proxy.rlwy.net:45675/railway', conn_max_age=1800),
 }
+
+# Configuration       
+cloudinary.config( 
+    cloud_name = "dlmcid90b", 
+    api_key = "973926521247783", 
+    api_secret = "iVA9j63HTBzTpwiR5k34cLujc8k", # Click 'View Credentials' below to copy your API secret
+    secure=True
+)
+
 
 AUTH_USER_MODEL = 'authentication.User'
 WAGTAIL_USER_EDIT_FORM = 'authentication.forms.CustomUserEditForm'
