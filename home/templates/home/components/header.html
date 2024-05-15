@@ -17,7 +17,7 @@
                         </p>
                     </div>
                 </div>
-                <a href="/privacy-policy" class="_14px-text-white hide-in-mobile">Privacy Policy</a>
+                <a href="{{ settings.home.ImportantPages.page_url.privacy }}" class="_14px-text-white hide-in-mobile">Privacy Policy</a>
             </div>
         </div>
     </section>
@@ -184,7 +184,7 @@
                         <a href="/" class="nav-link">Shop</a>
                     </li>
                     <li class="nav-list">
-                        <a href="/about" class="nav-link">About Us</a>
+                        <a href="{{ settings.home.ImportantPages.page_url.about }}" class="nav-link">About Us</a>
                     </li>
                     <li class="nav-dropdown-list">
                         <div data-hover="false" data-delay="0" class="link-dropdown w-dropdown">
@@ -193,15 +193,14 @@
                                 <div class="nav-dropdown-icon">expand_more</div>
                             </div>
                             <nav class="dropdown-options w-dropdown-list">
-                                <a href="/faq" class="submenu-link w-dropdown-link">FAQ</a>
-                                <a href="/privacy-policy" class="submenu-link w-dropdown-link">Privacy Policy</a>
+                                <a href="{{ settings.home.ImportantPages.page_url.privacy }}" class="submenu-link w-dropdown-link">Privacy Policy</a>
                                 <a href="{% url 'authentication:login' %}" class="submenu-link w-dropdown-link">Log-In</a>
                                 <a href="{% url 'authentication:signup' %}" class="submenu-link w-dropdown-link">Sign-Up</a>
                             </nav>
                         </div>
                     </li>
                     <li class="nav-list">
-                        <a href="/contact" class="nav-link">Contact</a>
+                        <a href="{{ settings.home.ImportantPages.page_url.contact }}" class="nav-link">Contact</a>
                     </li>
                 </ul>
             </nav>

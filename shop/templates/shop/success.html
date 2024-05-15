@@ -9,11 +9,13 @@
 <body>
     {% block sidebar %} 
     {% endblock %}
+    {% block content %}
     <section>
     <p>
         We appreciate your business! If you have any questions, please email
         <a href="mailto:{{ settings.home.SiteContact.email1 }}">{{ settings.home.SiteContact.email1 }}</a>.
     </p>
     </section>
+    {% endblock %}
 </body>
 </html>

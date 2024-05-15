@@ -2010,6 +2010,7 @@ html {
   
   .w-tabs {
     position: relative;
+    width: 100%;
   }
   
   .w-tabs:before, .w-tabs:after {
@@ -4493,6 +4494,8 @@ html {
   .page-wrapper {
     z-index: 100;
     overflow: hidden;
+    width: 100%;
+    margin-top: 5px;
   }
   
   .landscape-image-wrapper {
@@ -8284,11 +8287,12 @@ html {
   }
   
   .product-view-button.w--current {
-    background-color: var(--extra--transparent);
+    background-color: var(--extra--transparent); 
   }
   
   .product-archive-tab-wrapper {
     position: relative;
+    width: 100%;
   }
   
   .displaying-results {
@@ -8930,7 +8934,7 @@ html {
     }
   
     .main-block {
-      min-width: auto;
+      min-width: 100%;
     }
   
     .blog-cover-image {

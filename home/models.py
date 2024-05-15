@@ -191,6 +191,34 @@ class About(Page):
         # context['cart'] = cart
         context['trusted_by_companies'] = trusted_by_companies
         return context
+    
+class PrivacyPolicy(Page):
+    max_count = 1
+    template = 'home/privacy-policy.html'
+    privacy_policy = RichTextField(null=True, blank=True)
+    refund_policy = RichTextField(null=True, blank=True)
+    term_and_use = RichTextField(null=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('privacy_policy'),
+        FieldPanel('refund_policy'),
+        FieldPanel('term_and_use'),
+    ]
+
+    def get_context(self, request, *args, **kwargs):
+        context = super(PrivacyPolicy, self).get_context(request, *args, **kwargs)
+
+        categories = Category.objects.all()
+        if request.user.is_authenticated:
+            cart = Cart.objects.get_or_create(user=request.user)[0]
+            cart_items = cart.cartitem_set.all()
+            context['cart_items'] = cart_items
+        else:
+            cart = None
+
+        context['categories'] = categories
+        return context
+
 
 @register_setting
 class SiteSocial(BaseSiteSetting):
@@ -217,7 +245,7 @@ class SiteLogo(BaseSiteSetting):
 @register_setting
 class ImportantPages(BaseSiteSetting):
     # Fetch these pages when looking up ImportantPages for or a site
-    select_related = ["about", "home", "contact"]
+    select_related = ["about", "home", "contact", "privacy"]
 
     about = models.ForeignKey(
         'wagtailcore.Page', null=True, on_delete=models.SET_NULL, related_name='+')
@@ -225,10 +253,13 @@ class ImportantPages(BaseSiteSetting):
         'wagtailcore.Page', null=True, on_delete=models.SET_NULL, related_name='+')
     contact = models.ForeignKey(
         'wagtailcore.Page', null=True, on_delete=models.SET_NULL, related_name='+')
+    privacy = models.ForeignKey(
+        'wagtailcore.Page', null=True, on_delete=models.SET_NULL, related_name='+')
     panels = [
         PageChooserPanel('about', ['home.About']),
         PageChooserPanel('home', ['home.HomePage']),
         PageChooserPanel('contact', ['home.ContactFormPage']),
+        PageChooserPanel('privacy', ['home.PrivacyPolicy']),
     ]
 
 class ContactFormField(AbstractFormField):
