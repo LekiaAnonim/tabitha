@@ -7,7 +7,7 @@ env = environ.Env(
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 DEBUG = env('DEBUG')
 
-ALLOWED_HOST = ['*']
+ALLOWED_HOST = ['tabitha.market', 'web-production-4f0f.up.railway.app']
 
 # djangostripe/settings.py
 
