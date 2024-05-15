@@ -10,6 +10,7 @@ DEBUG = env('DEBUG')
 ALLOWED_HOSTS = ['tabitha.market', 'web-production-4f0f.up.railway.app']
 
 # djangostripe/settings.py
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 STRIPE_PUBLISHABLE_KEY = env('STRIPE_PUBLISHABLE_KEY')
 STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')

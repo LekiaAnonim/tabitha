@@ -15,14 +15,23 @@
             {% endif %}
             {% endblock %}
         </title>
-        <meta content="Tabitha" property="og:title"/>
-        <meta content="Tabitha" property="twitter:title"/>
+        {% block metatags %}
+        <meta content="{% if self.product_name %}{{self.product_name}}{% elif self.title %}{{self.title}}{% else %}Tabitha{% endif %}" property="og:title"/>
+        <meta content="{% if self.product_name %}{{self.product_name}}{% elif self.title %}{{self.title}}{% else %}Tabitha{% endif %}" property="twitter:title"/>
         <meta content="width=device-width, initial-scale=1" name="viewport"/>
         <meta content="Webflow" name="generator"/>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
         <meta name="created" content="{% now "jS M Y h:i" %}" />
-        <meta name="description" content="{% block description %}{% endblock %}" />
+        <meta name="description" content="{% block description %}{{self.intro}}{% endblock %}" />
         <meta name="viewport" content="{% block viewport %}width=device-width{% endblock %}" />
+        <meta name="keywords" content="Shop, Best, Reliable, Online store, Ecommerce, USA, Clarksville, Tennessee, Buy, Sell, Nuts, Flours, Grains, Seasonings and Sauces, Meat, Fish, Vegetables, Proteins, Fruits">
+        <meta name="description" content="Delivering joy, quality, and affordability">
+        <meta property="og:image" content="{% if self.image1 %}{{self.image1.url}}{% else %}{% static 'images/tabithastore_logo.jpg' %}{% endif %}" /> 
+    
+        <meta itemprop="name" content="Tabitha: {% if self.seo_title %}{{ self.seo_title }}{% else %}Tabitha: {{self.product_name|title}}{% endif %}">
+        <meta itemprop="description" content="{% if self.short_description %}{{self.short_description}}{% else %}{{ self.seo_description }}{% endif %}" />
+        <meta itemprop="image" content="{% if self.image1 %}{{self.image1.url}}{% else %}{% static 'images/tabithastore_logo.jpg' %}{% endif %}" />
+        {% endblock %}
 
         {% block favicon %}
             <link href="{% static 'images/tabithastore_logo.jpg' %}" rel="shortcut icon" type="image/x-icon"/>
