@@ -1,6 +1,4 @@
 {% load wagtailcore_tags %}{% load static %}{% load wagtailimages_tags %}
-{% load cart %}
-{% load custom_filter %}
 <div class="header-wrapper">
     <section class="top-notice-bar">
         <div class="container">
@@ -43,12 +41,12 @@
                     <div data-open-product="" data-wf-cart-type="rightSidebar" data-wf-cart-query="query Dynamo2" data-wf-page-link-href-prefix="" class="w-commerce-commercecartwrapper" data-node-type="commerce-cart-wrapper">
                         <a class="w-commerce-commercecartopenlink cart-button w-inline-block" role="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" aria-haspopup="dialog" aria-label="Open cart" data-node-type="commerce-cart-open-link" href="#">
                             <div class="relative-block">
-                                <img width="50" height="50" src="https://img.icons8.com/ios/50/shopping-bag--v1.png" alt="shopping-bag--v1"/>
-                                <div data-wf-bindings="%5B%7B%22innerHTML%22%3A%7B%22type%22%3A%22Number%22%2C%22filter%22%3A%7B%22type%22%3A%22numberPrecision%22%2C%22params%22%3A%5B%220%22%2C%22numberPrecision%22%5D%7D%2C%22dataPath%22%3A%22database.commerceOrder.userItemsCount%22%7D%7D%5D" class="w-commerce-commercecartopenlinkcount cart-quantity">{% if cart %}{{cart.total_cart_quantity}}{% else %} {% endif %}</div>
+                                <img width="25" height="25" src="https://img.icons8.com/ios/50/shopping-bag--v1.png" alt="shopping-bag--v1"/>
+                                <div class="w-commerce-commercecartopenlinkcount cart-quantity">{% if cart %}{{cart.total_cart_quantity}}{% else %} {% endif %}</div>
                             </div>
                             <div class="w-layout-vflex hide-in-tablet">
                                 <div class="text-12px w-inline-block">Your cart</div>
-                                <div data-wf-bindings="%5B%7B%22innerHTML%22%3A%7B%22type%22%3A%22CommercePrice%22%2C%22filter%22%3A%7B%22type%22%3A%22price%22%2C%22params%22%3A%5B%5D%7D%2C%22dataPath%22%3A%22database.commerceOrder.subtotal%22%7D%7D%5D" class="cart-total-price">{% if cart %}${{cart.total_cart_price}} USD{% else %} {% endif %}</div>
+                                <div class="cart-total-price">{% if cart %}${{cart.total_cart_price}} USD{% else %} {% endif %}</div>
                             </div>
                         </a>
                         <div tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel" class="offcanvas offcanvas-end">
@@ -61,7 +59,7 @@
                                 <div class="w-commerce-commercecartformwrapper">
                                     
                                     {% if cart_items %}
-                                    <form method="post" action="{% url 'shop:checkout' %}" class="w-commerce-commercecartform" id="cart-update-form">
+                                    <form method="post" action="" class="w-commerce-commercecartform" id="cart-update-form">
                                         {% csrf_token %}
                                         <div class="w-commerce-commercecartlist cart-list">
                                             {% for item in cart_items %}
@@ -70,7 +68,7 @@
                                                     <img src="{{item.product.image1.url}}" alt="{{item.product.product_name|title}}" class="w-commerce-commercecartitemimage card-product-image"/>
                                                 </div>
                                                 <div class="w-commerce-commercecartiteminfo cart-qty-info-block">
-                                                    <div class="w-commerce-commercecartproductname card-product-name">{{item.product.product_name|title}}</div>
+                                                    <div class="w-commerce-commercecartproductname card-product-name"><a href="{% pageurl item.product %}">{{item.product.product_name|title}}</a></div>
                                                     <div class="cart-price">$ {% if item.product.discount_price %} {{item.product.discount_price}} {% else %}{{item.product.original_price}} USD {% endif %}</div>
                                                     <ul class="w-commerce-commercecartoptionlist">
                                                         <li>
@@ -133,23 +131,6 @@
                                         </div>
                                     </form>
                                     
-                                    <script type="text/javascript"> 
-                                        $(document).on('submit','#cart-update-form',function(e){ 
-                                            e.preventDefault(); 
-                                            $.ajax({ 
-                                                type:'POST', 
-                                                url:'{% url "shop:home" %}', 
-                                                data: 
-                                                { 
-                                                    cart_quantity:$("#cart_quantity").val(), 
-                                                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val() 
-                                                }, 
-                                                success:function(){ 
-                                                      alert('Saved'); 
-                                                        } 
-                                                }) 
-                                            }); 
-                                    </script>
                                     {% else %}
                                     <div class="w-commerce-commercecartemptystate">
                                         <div aria-label="This cart is empty" aria-live="polite">No items found.</div>
@@ -216,7 +197,6 @@
                                 <a href="/privacy-policy" class="submenu-link w-dropdown-link">Privacy Policy</a>
                                 <a href="{% url 'authentication:login' %}" class="submenu-link w-dropdown-link">Log-In</a>
                                 <a href="{% url 'authentication:signup' %}" class="submenu-link w-dropdown-link">Sign-Up</a>
-                                <a href="/utility/style-guide" class="submenu-link w-dropdown-link">Style-Guide</a>
                             </nav>
                         </div>
                     </li>

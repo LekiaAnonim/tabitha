@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <!-- This site was created in Webflow. https://www.webflow.com -->
 <!-- Last Published: Thu Apr 04 2024 08:43:55 GMT+0000 (Coordinated Universal Time) -->
-<html data-wf-domain="ecommerce-tnc.webflow.io" data-wf-page="65f2c446b3b822983c0612d0" data-wf-site="65f0219f664a58453bb579a5" lang="en">
+<html lang="en">
     <head>
         <meta charset="utf-8"/>
     </head>
@@ -77,14 +77,22 @@
                                         <div>No products available</div>
                                         {% endif %}
                                     </div>
-                                    <div role="navigation" aria-label="List" class="w-pagination-wrapper">
-                                        <a href="?90700037_page=2" aria-label="Next Page" class="w-pagination-next pagination-button">
-                                            <div class="w-inline-block">Next</div>
-                                            <svg class="w-pagination-next-icon" height="12px" width="12px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" transform="translate(0, 1)">
-                                                <path fill="none" stroke="currentColor" fill-rule="evenodd" d="M4 2l4 4-4 4"></path>
-                                            </svg>
-                                        </a>
-                                        <link rel="prerender" href="?90700037_page=2"/>
+                                    <div class="pagination">
+                                        <span class="step-links">
+                                            {% if page_obj.has_previous %}
+                                                <a href="?page=1">&laquo; first</a>
+                                                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                                            {% endif %}
+                                    
+                                            <span class="current">
+                                                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                                            </span>
+                                    
+                                            {% if page_obj.has_next %}
+                                                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                                                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                                            {% endif %}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -161,14 +169,22 @@
                                         <div>No products available</div>
                                         {% endif %}
                                     </div>
-                                    <div role="navigation" aria-label="List" class="w-pagination-wrapper">
-                                        <a href="?05839744_page=2" aria-label="Next Page" class="w-pagination-next pagination-button">
-                                            <div class="w-inline-block">Next</div>
-                                            <svg class="w-pagination-next-icon" height="12px" width="12px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" transform="translate(0, 1)">
-                                                <path fill="none" stroke="currentColor" fill-rule="evenodd" d="M4 2l4 4-4 4"></path>
-                                            </svg>
-                                        </a>
-                                        <link rel="prerender" href="?05839744_page=2"/>
+                                    <div class="pagination">
+                                        <span class="step-links">
+                                            {% if page_obj.has_previous %}
+                                                <a href="?page=1">&laquo; first</a>
+                                                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                                            {% endif %}
+                                    
+                                            <span class="current">
+                                                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                                            </span>
+                                    
+                                            {% if page_obj.has_next %}
+                                                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                                                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                                            {% endif %}
+                                        </span>
                                     </div>
                                 </div>
                             </div>

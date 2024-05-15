@@ -173,18 +173,22 @@ class About(Page):
         context = super(About, self).get_context(request, *args, **kwargs)
 
         categories = Category.objects.all()
-        cart = Cart.objects.get_or_create(user=request.user)[0]
-        cart_items = cart.cartitem_set.all()
+        if request.user.is_authenticated:
+            cart = Cart.objects.get_or_create(user=request.user)[0]
+            cart_items = cart.cartitem_set.all()
+            context['cart_items'] = cart_items
+        else:
+            cart = None
 
         values = OurValues.objects.all()
         teams = Team.objects.all()
         trusted_by_companies = TrustedBy.objects.all()
 
-        context['cart_items'] = cart_items
+        # context['cart_items'] = cart_items
         context['categories'] = categories
         context['values'] = values
         context['teams'] = teams
-        context['cart'] = cart
+        # context['cart'] = cart
         context['trusted_by_companies'] = trusted_by_companies
         return context
 
@@ -279,12 +283,14 @@ class ContactFormPage(AbstractEmailForm):
         context = super(ContactFormPage, self).get_context(request, *args, **kwargs)
 
         categories = Category.objects.all()
-        cart = Cart.objects.get_or_create(user=request.user)[0]
-        cart_items = cart.cartitem_set.all()
-
-        context['cart_items'] = cart_items
+        if request.user.is_authenticated:
+            cart = Cart.objects.get_or_create(user=request.user)[0]
+            cart_items = cart.cartitem_set.all()
+            context['cart_items'] = cart_items
+            context['cart'] = cart
+        else:
+            cart = None
         context['categories'] = categories
-        context['cart'] = cart
         return context
     
 @register_setting

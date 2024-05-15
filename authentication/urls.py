@@ -6,24 +6,24 @@ app_name = 'authentication'
 
 urlpatterns = [
      path(
-        route='profile/<int:pk>',
+        route='profile/<int:pk>/',
         view=views.UserDetail.as_view(),
         name='member_profile'
     ),
     path(
-        route='update/<int:pk>',
+        route='update/<int:pk>/',
         view=views.UserUpdateView.as_view(),
         name='user_update'
     ),
     # Login and Password reset
     path(
-        route='signup',
+        route='signup/',
         view=views.UserRegisterView.as_view(),
         name='signup'
     ),
     path(route='signup/successful', view=views.SignUpSuccessful.as_view(), name='signup_successful'),
     path(
-        route='login',
+        route='login/',
         view=views.UserLoginView.as_view(),
         name='login'
     ),

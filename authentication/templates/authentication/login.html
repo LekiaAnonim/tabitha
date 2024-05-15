@@ -1,4 +1,4 @@
-{% load wagtailcore_tags %}{% load static %}{% load wagtailimages_tags %}
+{% load wagtailcore_tags %}{% load static %}{% load wagtailimages_tags %}{% load socialaccount %}
 <!DOCTYPE html>
 <html>
 
@@ -94,6 +94,7 @@
                         </span>
                     </div>
                 </form>
+                <a href="{% provider_login_url 'google' %}">Login with Google</a>
                 <a href="/" class="back-to-home-link w-inline-block">
                     <div>Back to home</div>
                     <div class="icon">east</div>
