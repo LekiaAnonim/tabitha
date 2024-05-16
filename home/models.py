@@ -241,6 +241,8 @@ class SiteContact(BaseSiteSetting):
 @register_setting
 class SiteLogo(BaseSiteSetting):
     logo = CloudinaryField("image", null=True, blank=True, help_text="Upload site logo")
+    sign_in_image = CloudinaryField("image", null=True, blank=True, help_text="Upload image that appears on the login page")
+    sign_up_image = CloudinaryField("image", null=True, blank=True, help_text="Upload image that appears on the signup page")
 
 @register_setting
 class ImportantPages(BaseSiteSetting):

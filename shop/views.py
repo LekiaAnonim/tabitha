@@ -32,14 +32,6 @@ class ShopView(ListView):
     template_name = 'shop/shop.html'
     context_object_name = 'products'
     paginate_by = 12
-    
-    def get_context_data(self, *args, **kwargs):
-        context = super(ShopView, self).get_context_data(**kwargs)
-        categories = Category.objects.all()
-        products = ProductPage.objects.all().order_by('first_published_at').order_by('-id')
-        context['categories'] = categories
-        context['products'] = products
-        return context
 	
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
@@ -72,18 +64,12 @@ class ShopView(ListView):
                 cart_item = get_object_or_404(CartItem, cart=cart, product=product)
                 cart_item.delete()
 
-        return render(request, self.template_name, {})
-        
-        
-    
-    def get(self , request, *args, **kwargs):
         self.object_list = self.get_queryset()
         context = super().get_context_data(**kwargs)
         categories = Category.objects.all()
         products = ProductPage.objects.all().order_by('first_published_at').order_by('-id')
-
-        if request.user.is_authenticated:
-            cart = Cart.objects.get_or_create(user=request.user)[0]
+        if self.request.user.is_authenticated:
+            cart = Cart.objects.get_or_create(user=self.request.user)[0]
             cart_items = cart.cartitem_set.all()
             context['cart_items'] = cart_items
         else:
@@ -91,28 +77,35 @@ class ShopView(ListView):
         context['categories'] = categories
         context['products'] = products
         context['cart'] = cart
-        return render(request, self.template_name, context)
+        return render(request, self.template_name, context)  
+    
+    # def get(self , request, *args, **kwargs):
+    #     self.object_list = self.get_queryset()
+    #     context = super().get_context_data(**kwargs)
+    #     categories = Category.objects.all()
+    #     return render(request, self.template_name, context)
+    
+    def get_context_data(self, *args, **kwargs):
+        context = super(ShopView, self).get_context_data(**kwargs)
+        categories = Category.objects.all()
+        products = ProductPage.objects.all().order_by('first_published_at').order_by('-id')
+
+        if self.request.user.is_authenticated:
+            cart = Cart.objects.get_or_create(user=self.request.user)[0]
+            cart_items = cart.cartitem_set.all()
+            context['cart_items'] = cart_items
+        else:
+            cart = None
+        context['categories'] = categories
+        context['products'] = products
+        context['cart'] = cart
+        return context
 	
 
 class CategoryProductView(ListView):
     model = Category
     template_name = 'shop/category_product.html'
     context_object_name = 'categories'
-    paginate_by = 12
-    
-    def get_context_data(self, *args, **kwargs):
-        context = super(CategoryProductView, self).get_context_data(**kwargs)
-		
-        category = get_object_or_404(Category, slug=self.kwargs.get('slug'))
-        categories = Category.objects.all()
-		
-        if category:
-            products = ProductPage.objects.filter(category=category).order_by('first_published_at').order_by('-id')
-        
-        context['category'] = category
-        context['categories'] = categories
-        context['products'] = products
-        return context
     
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
@@ -143,21 +136,60 @@ class CategoryProductView(ListView):
                 cart_item.save()
             return redirect('shop:checkout')
         
-        return render(request, self.template_name, {})
-    
-    def get(self , request, *args, **kwargs):
         self.object_list = self.get_queryset()
         context = super().get_context_data(**kwargs)
         categories = Category.objects.all()
-        if request.user.is_authenticated:
-            cart = Cart.objects.get_or_create(user=request.user)[0]
+        products = ProductPage.objects.all().order_by('first_published_at').order_by('-id')
+        if self.request.user.is_authenticated:
+            cart = Cart.objects.get_or_create(user=self.request.user)[0]
             cart_items = cart.cartitem_set.all()
             context['cart_items'] = cart_items
         else:
             cart = None
         context['categories'] = categories
+        context['products'] = products
         context['cart'] = cart
+        
         return render(request, self.template_name, context)
+    
+    # def get(self , request, *args, **kwargs):
+    #     self.object_list = self.get_queryset()
+    #     context = super().get_context_data(**kwargs)
+    #     category = get_object_or_404(Category, slug=self.kwargs.get('slug'))
+    #     categories = Category.objects.all()
+    #     if category:
+    #         products = ProductPage.objects.filter(category=category).order_by('first_published_at').order_by('-id')
+    #     if request.user.is_authenticated:
+    #         cart = Cart.objects.get_or_create(user=request.user)[0]
+    #         cart_items = cart.cartitem_set.all()
+    #         context['cart_items'] = cart_items
+    #     else:
+    #         cart = None
+    #     context['categories'] = categories
+    #     context['cart'] = cart
+    #     context['products'] = products
+    #     return render(request, self.template_name, context)
+    
+    def get_context_data(self, *args, **kwargs):
+        context = super(CategoryProductView, self).get_context_data(**kwargs)
+		
+        category = get_object_or_404(Category, slug=self.kwargs.get('slug'))
+        categories = Category.objects.all()
+		
+        if category:
+            products = ProductPage.objects.filter(category=category).order_by('first_published_at').order_by('-id')
+
+        if self.request.user.is_authenticated:
+            cart = Cart.objects.get_or_create(user=self.request.user)[0]
+            cart_items = cart.cartitem_set.all()
+            context['cart_items'] = cart_items
+        else:
+            cart = None
+        context['cart'] = cart
+        context['category'] = category
+        context['categories'] = categories
+        context['products'] = products
+        return context
 	
 
 class CheckOut(TemplateView):

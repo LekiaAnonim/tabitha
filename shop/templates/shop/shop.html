@@ -48,23 +48,17 @@
                                                         <div data-wf-sku-bindings="%5B%7B%22from%22%3A%22f_compare_at_price_7dr10dr%22%2C%22to%22%3A%22innerHTML%22%7D%5D" data-wf-sku-conditions="%7B%22condition%22%3A%7B%22fields%22%3A%7B%22default-sku%3Acompare-at-price%22%3A%7B%22exists%22%3A%22yes%22%2C%22type%22%3A%22CommercePrice%22%7D%7D%7D%2C%22timezone%22%3A%22Asia%2FDhaka%22%7D" class="discount-price">$ {{product.discount_price}} USD</div>
                                                     </div>
                                                     <div class="add-to-cart">
-                                                        <form action="/#{{product.slug}}" method="POST" data-loading-text="Adding to cart..." class="w-commerce-commerceaddtocartform">
+                                                        <form action="" method="POST" class="w-commerce-commerceaddtocartform">
                                                             {% csrf_token %}
                                                             <input hidden type="text" name='product' value='{{product.id}}'>
                                                             <input hidden type="text" name='action' value='add'>
-                                                            <input type="submit" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" data-loading-text="Adding to cart..." aria-busy="false" aria-haspopup="dialog" class="w-commerce-commerceaddtocartbutton product-add-button" value="Add to Cart"/>
+                                                            <input type="submit" type="button" aria-controls="offcanvasRight" data-loading-text="Adding to cart..." aria-busy="false" class="w-commerce-commerceaddtocartbutton product-add-button" value="Add to Cart"/>
                                                             <a data-node-type="commerce-buy-now-button" data-default-text="Buy now" data-subscription-text="Subscribe now" aria-busy="false" aria-haspopup="false" style="display:none" class="w-commerce-commercebuynowbutton" href="/checkout">Buy now</a>
                                                         </form>
-                                                        <div style="display:none" class="w-commerce-commerceaddtocartoutofstock" tabindex="0">
-                                                            <div>This product is out of stock.</div>
-                                                        </div>
-                                                        <div aria-live="assertive" data-node-type="commerce-add-to-cart-error" style="display:none" class="w-commerce-commerceaddtocarterror">
-                                                            <div data-node-type="commerce-add-to-cart-error" data-w-add-to-cart-quantity-error="Product is not available in this quantity." data-w-add-to-cart-general-error="Something went wrong when adding this item to the cart." data-w-add-to-cart-mixed-cart-error="You can’t purchase another product with a subscription." data-w-add-to-cart-buy-now-error="Something went wrong when trying to purchase this item." data-w-add-to-cart-checkout-disabled-error="Checkout is disabled on this site." data-w-add-to-cart-select-all-options-error="Please select an option in each set.">Product is not available in this quantity.</div>
-                                                        </div>
                                                     </div>
                                                 </div>
                                                 {% if product.on_sale %}
-                                                <div data-wf-sku-conditions="%7B%22condition%22%3A%7B%22fields%22%3A%7B%22default-sku%3Acompare-at-price%22%3A%7B%22exists%22%3A%22yes%22%2C%22type%22%3A%22CommercePrice%22%7D%7D%7D%2C%22timezone%22%3A%22Asia%2FDhaka%22%7D" class="sale-tag">On Sale</div>
+                                                <div class="sale-tag">On Sale</div>
                                                 {% else %}
                                                 <div></div>
                                                 {% endif %}

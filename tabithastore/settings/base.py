@@ -143,7 +143,7 @@ cloudinary.config(
 AUTH_USER_MODEL = 'authentication.User'
 WAGTAIL_USER_EDIT_FORM = 'authentication.forms.CustomUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'authentication.forms.CustomUserCreationForm'
-WAGTAIL_USER_CUSTOM_FIELDS = ['country', 'city', 'phone_number', 'region', 'residential_address', 'avatar']
+WAGTAIL_USER_CUSTOM_FIELDS = ['email', 'country', 'city', 'phone_number', 'region', 'residential_address', 'avatar']
 
 
 

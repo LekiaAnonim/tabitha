@@ -77,7 +77,7 @@ class ProductPage(Page):
     full_description = RichTextField(null=True, blank=True)
     additional_information = RichTextField(null=True, blank=True)
     quantity = models.PositiveIntegerField(default=1, null=True, blank=True)
-    SKU = models.CharField(default=random_alphanumeric_string(), max_length=500, null=False, blank=False)
+    # SKU = models.CharField(default=random_alphanumeric_string(), max_length=500, null=False, blank=False)
     # slug = models.SlugField(null=True,  max_length=500, unique=True)
 
     content_panels = Page.content_panels + [
@@ -85,7 +85,7 @@ class ProductPage(Page):
         FieldPanel('original_price'),
         FieldPanel('discount_price'),
         FieldPanel('quantity'),
-        FieldPanel('SKU'),
+        # FieldPanel('SKU'),
         FieldPanel('on_sale'),
         FieldPanel('image1'),
         FieldPanel('image2'),

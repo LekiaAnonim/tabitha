@@ -39,7 +39,7 @@
 <body>
     <div class="w-users-userformpagewrap users-page-wrapper">
         <div class="users-form-wrapper">
-            <img src="https://assets-global.website-files.com/65f0219f664a58453bb579a5/65fa679b1c30f8603b92ab00_image.webp" loading="lazy" sizes="(max-width: 767px) 100vw, (max-width: 991px) 360px, 466px" srcset="https://assets-global.website-files.com/65f0219f664a58453bb579a5/65fa679b1c30f8603b92ab00_image-p-500.webp 500w, https://assets-global.website-files.com/65f0219f664a58453bb579a5/65fa679b1c30f8603b92ab00_image-p-800.webp 800w, https://assets-global.website-files.com/65f0219f664a58453bb579a5/65fa679b1c30f8603b92ab00_image.webp 932w" alt="" class="users-page-image"/>
+            <img src="{% if settings.home.SiteLogo.sign_up_image %}{{settings.home.SiteLogo.sign_up_image.url}} {% else %} https://assets-global.website-files.com/65f0219f664a58453bb579a5/65fa679b1c30f8603b92ab00_image.webp {% endif %}" loading="lazy" sizes="(max-width: 767px) 100vw, (max-width: 991px) 360px, 466px" srcset="{% if settings.home.SiteLogo.sign_up_image %}{{settings.home.SiteLogo.sign_up_image.url}} {% else %} https://assets-global.website-files.com/65f0219f664a58453bb579a5/65fa679b1c30f8603b92ab00_image.webp {% endif %} 500w, {% if settings.home.SiteLogo.sign_up_image %}{{settings.home.SiteLogo.sign_up_image.url}} {% else %} https://assets-global.website-files.com/65f0219f664a58453bb579a5/65fa679b1c30f8603b92ab00_image.webp {% endif %} 800w, {% if settings.home.SiteLogo.sign_up_image %}{{settings.home.SiteLogo.sign_up_image.url}} {% else %} https://assets-global.website-files.com/65f0219f664a58453bb579a5/65fa679b1c30f8603b92ab00_image.webp {% endif %} 932w" alt="" class="users-page-image"/>
             <div class="w-users-usersignupformwrapper users-form-block">
                 {% block messages %} {% if messages %} {% for message in messages %}
                 <div class="message-alert">
@@ -59,8 +59,8 @@
                     <div class="w-users-userformheader form-header">
                         <h2 class="_30px-title">Sign up</h2>
                     </div>
-                    <label for="id_username" class="users-form-label">Username</label>
-                    <input class="users-input-field w-input" maxlength="256" name="username" placeholder="Username" type="text" id="id_username" required/>
+                    <!-- <label for="id_username" class="users-form-label">Username</label>
+                    <input class="users-input-field w-input" maxlength="256" name="username" placeholder="Username" type="text" id="id_username" required/> -->
                     <label for="id_email" class="users-form-label">Email</label>
                     <input placeholder="Email" id="id_email" maxlength="256" name="email" class="users-input-field w-input" type="email" autoComplete="username" required/>
                     <label for="id_password1" class="users-form-label">Password</label>

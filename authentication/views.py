@@ -27,6 +27,8 @@ from django.utils.encoding import force_bytes
 from django.contrib.sites.shortcuts import get_current_site
 from .forms import UserRegisterForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from authentication.forms import UserSignInForm
+from wagtail.admin.forms.auth import LoginForm
 # Create your views here.
 
 class SignUpSuccessful(TemplateView):
@@ -38,7 +40,7 @@ class UserDetail(LoginRequiredMixin, DetailView):
     redirect_field_name = "redirect_to"
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
-    fields = ['username', 'first_name', 'last_name', 'email', 'country', 'region', 'city', 'phone_number', 'residential_address', 'avatar']
+    fields = ['first_name', 'last_name', 'email', 'country', 'region', 'city', 'phone_number', 'residential_address', 'avatar']
     model = Member
     template_name = 'authentication/user_update.html'
     login_url = "authentication:login"
@@ -48,30 +50,30 @@ class UserLoginView(View):
      Logs author into dashboard.
     """
     template_name = 'authentication/login.html'
-    context_object = {"login_form": AuthenticationForm}
+    context_object = {"login_form": LoginForm}
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, self.context_object)
 
     def post(self, request, *args, **kwargs):
 
-        login_form = AuthenticationForm(data=request.POST)
+        login_form = LoginForm(data = request.POST)
 
         if login_form.is_valid():
-            username = login_form.cleaned_data['username']
+            email = login_form.cleaned_data['username']
             password = login_form.cleaned_data['password']
-            user = authenticate(request, username=username, password=password)
+            user = authenticate(request, email=email, password=password)
 
             
             login(request, user)
             messages.success(request, f"Login Successful ! "
-                                f"Welcome {user.username}.")
+                                f"Welcome {user.email}.")
             
             return redirect('shop:home')
 
         else:
             messages.error(request,
-                           f"Please enter a correct username and password. Note that both fields may be case-sensitive."
+                           f"Please enter a correct email and password. Note that both fields may be case-sensitive."
                            )
             return render(request, self.template_name, self.context_object)
 

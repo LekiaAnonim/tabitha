@@ -4497,7 +4497,9 @@ html {
     width: 100%;
     margin-top: 5px;
   }
-  
+  .field_card{
+    width: 100%;
+  }
   .landscape-image-wrapper {
     cursor: pointer;
     border-radius: 2px;

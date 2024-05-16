@@ -1,4 +1,5 @@
 {% extends "wagtailusers/users/edit.html" %} {% block extra_fields %}
+<li>{% include "wagtailadmin/shared/field.html" with field=form.email %}</li>
 <li>{% include "wagtailadmin/shared/field.html" with field=form.country %}</li>
 <li>{% include "wagtailadmin/shared/field.html" with field=form.region %}</li>
 <li>{% include "wagtailadmin/shared/field.html" with field=form.city %}</li>
