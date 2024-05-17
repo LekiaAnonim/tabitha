@@ -143,6 +143,7 @@ class Team(models.Model):
     
     class Meta:
         verbose_name_plural = "Teams"
+
     
 class About(Page):
     max_count = 1
@@ -183,12 +184,9 @@ class About(Page):
         values = OurValues.objects.all()
         teams = Team.objects.all()
         trusted_by_companies = TrustedBy.objects.all()
-
-        # context['cart_items'] = cart_items
         context['categories'] = categories
         context['values'] = values
         context['teams'] = teams
-        # context['cart'] = cart
         context['trusted_by_companies'] = trusted_by_companies
         return context
     
@@ -219,6 +217,10 @@ class PrivacyPolicy(Page):
         context['categories'] = categories
         return context
 
+@register_setting
+class TransactionOption(BaseSiteSetting):
+    shipping_note = models.CharField(max_length=500, null=True, blank=True, help_text="Free shipping on orders $100+")
+    tax_rate = models.DecimalField(decimal_places=2, max_digits=3, blank=True, null=True)
 
 @register_setting
 class SiteSocial(BaseSiteSetting):

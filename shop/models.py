@@ -168,7 +168,7 @@ class Cart(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.user.username} {self.user.first_name}, {self.created_at}'
+        return f'{self.user.email} {self.user.first_name}, {self.created_at}'
     
     def is_in_cart(self, product_id):
         """
@@ -261,7 +261,7 @@ class Order(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.customer.username} {self.customer.first_name}, {self.cart_item}, {self.quantity}, {self.price}'
+        return f'{self.customer.email} {self.customer.first_name}, {self.cart_item}, {self.quantity}, {self.price}'
   
     def placeOrder(self): 
         self.save() 

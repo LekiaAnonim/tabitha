@@ -11,6 +11,7 @@ from django.conf import settings # new
 from django.http.response import JsonResponse # new
 from django.views.decorators.csrf import csrf_exempt # new
 import stripe
+from home.models import TransactionOption
 
 # Create your views here.
 def get_products_in_cart(cart):
@@ -63,7 +64,6 @@ class ShopView(ListView):
             if cart.is_in_cart(product_id):
                 cart_item = get_object_or_404(CartItem, cart=cart, product=product)
                 cart_item.delete()
-
         self.object_list = self.get_queryset()
         context = super().get_context_data(**kwargs)
         categories = Category.objects.all()
@@ -78,12 +78,6 @@ class ShopView(ListView):
         context['products'] = products
         context['cart'] = cart
         return render(request, self.template_name, context)  
-    
-    # def get(self , request, *args, **kwargs):
-    #     self.object_list = self.get_queryset()
-    #     context = super().get_context_data(**kwargs)
-    #     categories = Category.objects.all()
-    #     return render(request, self.template_name, context)
     
     def get_context_data(self, *args, **kwargs):
         context = super(ShopView, self).get_context_data(**kwargs)
@@ -149,26 +143,7 @@ class CategoryProductView(ListView):
         context['categories'] = categories
         context['products'] = products
         context['cart'] = cart
-        
         return render(request, self.template_name, context)
-    
-    # def get(self , request, *args, **kwargs):
-    #     self.object_list = self.get_queryset()
-    #     context = super().get_context_data(**kwargs)
-    #     category = get_object_or_404(Category, slug=self.kwargs.get('slug'))
-    #     categories = Category.objects.all()
-    #     if category:
-    #         products = ProductPage.objects.filter(category=category).order_by('first_published_at').order_by('-id')
-    #     if request.user.is_authenticated:
-    #         cart = Cart.objects.get_or_create(user=request.user)[0]
-    #         cart_items = cart.cartitem_set.all()
-    #         context['cart_items'] = cart_items
-    #     else:
-    #         cart = None
-    #     context['categories'] = categories
-    #     context['cart'] = cart
-    #     context['products'] = products
-    #     return render(request, self.template_name, context)
     
     def get_context_data(self, *args, **kwargs):
         context = super(CategoryProductView, self).get_context_data(**kwargs)
@@ -228,6 +203,13 @@ class CheckOut(TemplateView):
             total_amount = total_amount
         else:
             total_amount = sum(item.product.original_price * item.quantity for item in cart_items)
+        transaction_settings = TransactionOption.for_request(request=request)
+        tax = round(total_amount*transaction_settings.tax_rate, 2)
+        tax_rate = transaction_settings.tax_rate
+        # total = total_amount + tax
+        # total_original = sum(item.product.original_price * item.quantity for item in cart_items)
+        # total_discount = sum(item.product.discount_price * item.quantity for item in cart_items)
+        # print(tax)
 
         domain_url = settings.WAGTAILADMIN_BASE_URL
         stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -248,13 +230,18 @@ class CheckOut(TemplateView):
                 mode='payment',
                 currency= "usd",
                 customer_email = customer.email,
+                # amount_subtotal= total_amount,
+                # amount_total = total,
+            
+                # amount_discount= (total_discount - total_original),
+                # amount_shipping = 0,
+                # amount_tax= tax,
                 line_items=[
-                    
                     {
                         'quantity': int(item.quantity),
                         'price_data': {
                         'currency': 'usd',
-                        'unit_amount': int(item.product.discount_price*100),
+                        'unit_amount': int(item.product.discount_price*100*(1+tax_rate)),
                         'product_data': {
                             'name': str(item.product.product_name),
                             'description': str(item.product.short_description),
@@ -265,7 +252,7 @@ class CheckOut(TemplateView):
                         'quantity': int(item.quantity),
                         'price_data': {
                         'currency': 'usd',
-                        'unit_amount': int(item.product.original_price*100),
+                        'unit_amount': int(item.product.original_price*100*(1+tax_rate)),
                         'product_data': {
                             'name': str(item.product.product_name),
                             'description': str(item.product.short_description),
@@ -286,9 +273,21 @@ class CheckOut(TemplateView):
         if request.user.is_authenticated:
             cart = Cart.objects.get_or_create(user=request.user)[0]
             cart_items = cart.cartitem_set.all()
+            total_amount = sum(item.product.discount_price*item.quantity for item in cart_items)
+            if total_amount:
+                total_amount = total_amount
+            else:
+                total_amount = sum(item.product.original_price*item.quantity for item in cart_items)
+            transaction_settings = TransactionOption.for_request(request=request)
+            tax = total_amount*(transaction_settings.tax_rate)
+            total = total_amount + tax
+            context['total'] = total
+            context['tax'] = round(tax, 2)
             context['cart_items'] = cart_items
         else:
             cart = None
+
+        
         context['categories'] = categories
         context['cart'] = cart
         return render(request, self.template_name, context)
