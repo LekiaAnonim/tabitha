@@ -6605,7 +6605,9 @@ html {
     padding: 26px;
     display: flex;
   }
-  
+  /* .remove-btn{
+    background-color: #c71a1af6;
+  } */
   .checkbox {
     border: 2px solid var(--text--neutral-200);
     border-radius: 2px;
@@ -7655,8 +7657,8 @@ html {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 0;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    /* padding-top: 20px;
+    padding-bottom: 20px; */
   }
   
   .checkout-product-info {
@@ -7682,10 +7684,10 @@ html {
     border-bottom: 1px solid var(--text--neutral-100);
     flex-flow: column;
     width: 100%;
-    margin-top: 80px;
+    margin-top: 0px;
     margin-bottom: 0;
     padding-top: 17px;
-    padding-bottom: 55px;
+    /* padding-bottom: 55px; */
     display: flex;
   }
   

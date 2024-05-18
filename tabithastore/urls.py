@@ -16,6 +16,7 @@ urlpatterns = [
     path("search/", search_views.search, name="search"),
     path("", include('shop.urls', namespace = 'shop')),
     path("user/", include('authentication.urls', namespace = 'authentication')),
+    path("convert/", include("guest_user.urls")),
 ]
 
 

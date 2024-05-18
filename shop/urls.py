@@ -10,6 +10,11 @@ urlpatterns = [
     path('user-account/', views.UserAccountView.as_view() , name='account'),
 
     path('config/', views.stripe_config),
-    path('success/', views.SuccessView.as_view()), # new
-    path('cancel/', views.CancelledView.as_view()), # new
+    path('success/', views.SuccessView.as_view()),
+    path('cancel/', views.CancelledView.as_view()),
+    path(
+        route='search_results',
+        view=views.SearchResultsList.as_view(),
+        name='search_results'
+    ),
 ]

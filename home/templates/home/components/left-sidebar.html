@@ -4,8 +4,8 @@
 </div>
 <div class="sidebar-form">
     <div class="sidebar-wrapper">
-        <form action="/search" class="search w-form">
-            <input class="sidebar-search-input w-input" maxlength="256" name="query" placeholder="Search…" type="search" id="search-3" required=""/>
+        <form action="{% url 'shop:search_results' %}" class="search w-form">
+            <input class="sidebar-search-input w-input" maxlength="256" name="search" placeholder="Search…" type="search" id="search" required=""/>
             <input type="submit" class="sidebar-search-button w-button" value="search"/>
         </form>
         <div class="w-layout-vflex _10px-gap">

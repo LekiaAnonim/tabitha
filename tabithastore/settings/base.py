@@ -61,6 +61,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
 
     'allauth.socialaccount.providers.google',
+    "guest_user",
+    "mathfilters",
 ]
 
 SITE_ID = 2
@@ -111,6 +113,8 @@ AUTHENTICATION_BACKENDS = [
 
     # `allauth` specific authentication methods, such as login by email
     'allauth.account.auth_backends.AuthenticationBackend',
+
+    "guest_user.backends.GuestBackend",
 ]
 
 
