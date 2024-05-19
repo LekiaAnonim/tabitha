@@ -9,7 +9,11 @@ from wagtail.snippets.models import register_snippet
 from modelcluster.fields import ParentalKey
 from wagtail.contrib.forms.panels import FormSubmissionsPanel
 from cloudinary.models import CloudinaryField
-from shop.models import Category, Cart
+from shop.models import Category, Cart, ProductPage, CartItem
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+from django.contrib import messages
 
 
 class HomePage(Page):
@@ -48,13 +52,40 @@ class SubscribeFormPage(AbstractEmailForm):
         ], "Email"),
     ]
 
+    def get_context(self, request, *args, **kwargs):
+        context = super(SubscribeFormPage, self).get_context(request, *args, **kwargs)
+
+        categories = Category.objects.all()
+        if request.user.is_authenticated:
+            cart = Cart.objects.get_or_create(user=request.user)[0]
+            cart_items = cart.cartitem_set.all()
+            context['cart_items'] = cart_items
+            context['cart'] = cart
+        else:
+            cart = None
+        context['categories'] = categories
+        return context
+
     def serve(self, request, *args, **kwargs):
         if request.method == 'POST':
             form = self.get_form(request.POST, page=self, user=request.user)
-
+            action = request.POST.get('action')
+            cart, _ = Cart.objects.get_or_create(user=request.user)
             if form.is_valid():
-                self.process_form_submission(form)
+                if action == 'update':
+                    product_id = int(request.POST.get('cart_product'))
+                    product = get_object_or_404(ProductPage, pk=product_id)
+                    cart_item = get_object_or_404(CartItem, cart=cart, product=product)
+                    new_quantity = int(request.POST.get('cart_quantity', 0))
+                    if new_quantity <= 0:
+                        cart_item.delete()
+                    else:
+                        cart_item.quantity = new_quantity
+                        cart_item.save()
+                    messages.success(request, f"Cart update successful !!")
+                    return redirect('shop:checkout')
                 
+                self.process_form_submission(form)
                 # Update the original landing page context with other data
                 landing_page_context = self.get_context(request)
                 landing_page_context['email'] = form.cleaned_data['email']
@@ -178,6 +209,7 @@ class About(Page):
             cart = Cart.objects.get_or_create(user=request.user)[0]
             cart_items = cart.cartitem_set.all()
             context['cart_items'] = cart_items
+            context['cart'] = cart
         else:
             cart = None
 
@@ -189,6 +221,32 @@ class About(Page):
         context['teams'] = teams
         context['trusted_by_companies'] = trusted_by_companies
         return context
+    
+    def serve(self, request):
+        if request.method == 'POST':
+            action = request.POST.get('action')
+            cart, _ = Cart.objects.get_or_create(user=request.user)
+            
+            if action == 'update':
+                product_id = int(request.POST.get('cart_product'))
+                product = get_object_or_404(ProductPage, pk=product_id)
+                cart_item = get_object_or_404(CartItem, cart=cart, product=product)
+                new_quantity = int(request.POST.get('cart_quantity', 0))
+                if new_quantity <= 0:
+                    cart_item.delete()
+                else:
+                    cart_item.quantity = new_quantity
+                    cart_item.save()
+                messages.success(request, f"Cart update successful !!")
+                return redirect('shop:checkout')
+            return HttpResponseRedirect(reverse('shop:checkout'))
+        else:
+            return render(
+            request,
+            self.get_template(request),
+            self.get_context(request)
+        )
+
     
 class PrivacyPolicy(Page):
     max_count = 1
@@ -211,11 +269,37 @@ class PrivacyPolicy(Page):
             cart = Cart.objects.get_or_create(user=request.user)[0]
             cart_items = cart.cartitem_set.all()
             context['cart_items'] = cart_items
+            context['cart'] = cart
         else:
             cart = None
 
         context['categories'] = categories
         return context
+    
+    def serve(self, request):
+        if request.method == 'POST':
+            action = request.POST.get('action')
+            cart, _ = Cart.objects.get_or_create(user=request.user)
+            
+            if action == 'update':
+                product_id = int(request.POST.get('cart_product'))
+                product = get_object_or_404(ProductPage, pk=product_id)
+                cart_item = get_object_or_404(CartItem, cart=cart, product=product)
+                new_quantity = int(request.POST.get('cart_quantity', 0))
+                if new_quantity <= 0:
+                    cart_item.delete()
+                else:
+                    cart_item.quantity = new_quantity
+                    cart_item.save()
+                messages.success(request, f"Cart update successful !!")
+                return redirect('shop:checkout')
+            return HttpResponseRedirect(reverse('shop:checkout'))
+        else:
+            return render(
+            request,
+            self.get_template(request),
+            self.get_context(request)
+        )
 
 @register_setting
 class TransactionOption(BaseSiteSetting):
@@ -292,8 +376,21 @@ class ContactFormPage(AbstractEmailForm):
             form = self.get_form(request.POST, page=self, user=request.user)
 
             if form.is_valid():
+                action = request.POST.get('action')
+                cart, _ = Cart.objects.get_or_create(user=request.user)
+                if action == 'update':
+                    product_id = int(request.POST.get('cart_product'))
+                    product = get_object_or_404(ProductPage, pk=product_id)
+                    cart_item = get_object_or_404(CartItem, cart=cart, product=product)
+                    new_quantity = int(request.POST.get('cart_quantity', 0))
+                    if new_quantity <= 0:
+                        cart_item.delete()
+                    else:
+                        cart_item.quantity = new_quantity
+                        cart_item.save()
+                    messages.success(request, f"Cart update successful !!")
+                    return redirect('shop:checkout')
                 self.process_form_submission(form)
-                
                 # Update the original landing page context with other data
                 landing_page_context = self.get_context(request)
                 landing_page_context['email'] = form.cleaned_data['email']

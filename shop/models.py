@@ -16,6 +16,7 @@ import string
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.contrib import messages
 
 class CategoryIndexPage(Page):
     template = 'shop/all_courses.html'
@@ -146,6 +147,19 @@ class ProductPage(Page):
                 if not created:
                     cart_item.quantity += new_quantity
                     cart_item.save()
+
+            elif action == 'update':
+                product_id = int(request.POST.get('cart_product'))
+                product = get_object_or_404(ProductPage, pk=product_id)
+                cart_item = get_object_or_404(CartItem, cart=cart, product=product)
+                new_quantity = int(request.POST.get('cart_quantity', 0))
+                if new_quantity <= 0:
+                    cart_item.delete()
+                else:
+                    cart_item.quantity = new_quantity
+                    cart_item.save()
+                messages.success(request, f"Cart update successful !!")
+                return redirect('shop:checkout')
             return HttpResponseRedirect(reverse('shop:checkout'))
         else:
             return render(

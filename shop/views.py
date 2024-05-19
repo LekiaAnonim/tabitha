@@ -376,22 +376,39 @@ class UserAccountView(LoginRequiredMixin, TemplateView):
         return context
     
     def post(self, request, *args, **kwargs):
-        user = get_object_or_404(User, pk=request.user.id)
-        # Get Post information from tempate
-        first_name =  request.POST.get('first_name')
-        last_name =  request.POST.get('last_name')
-        region =  request.POST.get('region')
-        country =  request.POST.get('country')
-        address =  request.POST.get('address')
-        phone =  request.POST.get('phone')
-        # Update User Model
-        user.first_name = first_name
-        user.last_name = last_name
-        user.region = region
-        user.country = country
-        user.residential_address = address
-        user.phone_number = phone
-        user.save()
+        action = request.POST.get('action')
+        cart = Cart.objects.get_or_create(user=request.user)[0]
+        # cart_items = cart.cartitem_set.all()
+        if action == 'account':
+            user = get_object_or_404(User, pk=request.user.id)
+            # Get Post information from tempate
+            first_name =  request.POST.get('first_name')
+            last_name =  request.POST.get('last_name')
+            region =  request.POST.get('region')
+            country =  request.POST.get('country')
+            address =  request.POST.get('address')
+            phone =  request.POST.get('phone')
+            # Update User Model
+            user.first_name = first_name
+            user.last_name = last_name
+            user.region = region
+            user.country = country
+            user.residential_address = address
+            user.phone_number = phone
+            user.save()
+        
+        elif action == 'update':
+            product_id = int(request.POST.get('cart_product'))
+            product = get_object_or_404(ProductPage, pk=product_id)
+            cart_item = get_object_or_404(CartItem, cart=cart, product=product)
+            new_quantity = int(request.POST.get('cart_quantity', 0))
+            if new_quantity <= 0:
+                cart_item.delete()
+            else:
+                cart_item.quantity = new_quantity
+                cart_item.save()
+            messages.success(request, f"Cart update successful !!")
+            return redirect('shop:checkout')
         return redirect('shop:account')
     
     def get(self , request, *args, **kwargs):
@@ -440,7 +457,7 @@ class SearchResultsList(ListView):
         context['cart'] = cart
         return context
     
-    @method_decorator(login_required)
+    @method_decorator(allow_guest_user)
     def post(self, request, *args, **kwargs):
         
         action = request.POST.get('action')

@@ -294,7 +294,7 @@
                                             <input class="contact-form-input-field w-input" maxlength="256" name="address" placeholder="Address" type="text" id="address" required value="{{request.user.residential_address}}"/>
                                             <label for="phone">Phone Number</label>
                                             <input class="contact-form-input-field w-input" maxlength="256" name="phone" placeholder="Phone number" type="text" id="phone" required value="{{request.user.phone_number}}"/>
-
+                                            <input hidden type="text" name='action' value='account'>
                                             <h3>Password settings</h3>
                                             <a href="/reset-password" class="w-inline-block">Reset password</a>
                                             <!-- <label class="w-checkbox">
