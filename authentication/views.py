@@ -29,7 +29,6 @@ from .forms import UserRegisterForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from authentication.forms import UserSignInForm
 from wagtail.admin.forms.auth import LoginForm
-from django.contrib.auth import views as auth_views
 # Create your views here.
 
 class SignUpSuccessful(TemplateView):
@@ -46,7 +45,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'authentication/user_update.html'
     login_url = "authentication:login"
     redirect_field_name = "redirect_to"
-class UserLoginView(auth_views.LoginView):
+class UserLoginView(View):
     """
      Logs author into dashboard.
     """
@@ -70,7 +69,7 @@ class UserLoginView(auth_views.LoginView):
             messages.success(request, f"Login Successful ! "
                                 f"Welcome {user.email}.")
             
-            return redirect(self.get_success_url())
+            return redirect('shop:home')
 
         else:
             messages.error(request,

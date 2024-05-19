@@ -277,7 +277,7 @@ class CheckOut(TemplateView):
                     payment_method_types=['card'],
                     mode='payment',
                     currency= "usd",
-                    customer_email = email,
+                    customer_email = email.replace(" ", ""),
                     line_items=[
                         {
                             'quantity': int(item.quantity),
