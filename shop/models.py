@@ -17,13 +17,14 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib import messages
+from wagtail.admin.filters import WagtailFilterSet
 
-class CategoryIndexPage(Page):
-    template = 'shop/all_courses.html'
+# class CategoryIndexPage(Page):
+#     template = 'shop/all_courses.html'
 
-    def get_context(self, request, *args, **kwargs):
-        context = super(CategoryIndexPage, self).get_context(request, *args, **kwargs)
-        return context
+#     def get_context(self, request, *args, **kwargs):
+#         context = super(CategoryIndexPage, self).get_context(request, *args, **kwargs)
+#         return context
 
 @register_snippet
 class Category(models.Model):
@@ -168,7 +169,7 @@ class ProductPage(Page):
             self.get_context(request)
         )
 
-@register_snippet
+# @register_snippet
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     items = models.ManyToManyField('ProductPage', through='CartItem')
@@ -182,7 +183,7 @@ class Cart(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.user.email} {self.user.first_name}, {self.created_at}'
+        return f'{self.user.email}'
     
     def is_in_cart(self, product_id):
         """
@@ -231,7 +232,7 @@ class Cart(models.Model):
             total_quantity += item.quantity
         return total_quantity
 
-@register_snippet
+# @register_snippet
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, null=True)
     product = models.ForeignKey('ProductPage', on_delete=models.CASCADE, related_name='cart_product')
@@ -245,9 +246,9 @@ class CartItem(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.cart}, {self.product}, {self.quantity}'
+        return f'{self.product}'
 
-@register_snippet   
+# @register_snippet   
 class Order(models.Model): 
     cart_item = models.ForeignKey(CartItem, 
                                 on_delete=models.DO_NOTHING, null=True) 
@@ -258,7 +259,7 @@ class Order(models.Model):
     address = models.CharField(max_length=500, default='', blank=True, null=True)
     city = models.CharField(max_length=500, default='', blank=True, null=True)
     country = models.CharField(max_length=500, default='', blank=True, null=True)
-    date = models.DateField(default=datetime.datetime.today)
+    date = models.DateField(auto_now=True)
     status = models.BooleanField(default=False) 
 
     panels = [
@@ -275,7 +276,7 @@ class Order(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.customer.email} {self.customer.first_name}, {self.cart_item}, {self.quantity}, {self.price}'
+        return f'{self.customer.email}, {self.cart_item}'
   
     def placeOrder(self): 
         self.save() 
@@ -283,3 +284,8 @@ class Order(models.Model):
     @staticmethod
     def get_orders_by_customer(customer_id): 
         return Order.objects.filter(customer=customer_id).order_by('-date')
+    
+# class OrderFilterSet(WagtailFilterSet):
+#     class Meta:
+#         model = Order
+#         fields = ["customer", "quantity", "price", "date"]
