@@ -1,0 +1,57 @@
+{% extends "wagtailadmin/generic/form.html" %}
+{% load i18n %}
+{% load mathfilters %}
+{% block before_form %}
+<style>
+    .metric-card{
+        background-color: #007d7e;
+        padding: 10px;
+        border-radius: 8px;
+        width: 120px;
+        height: fit-content;
+    }
+    .metric-card *{
+        color: white;
+        margin: 0px;
+    }
+    .cards{
+        display: flex;
+        gap: 20px;
+    }
+    .summary-stats{
+        margin-bottom: 30px;
+    }
+</style>
+<div class="summary-stats">
+    <div class="cards">
+        <div class="metric-card">
+            <h4>Total Price</h4>
+            <p>${{order.cart.total_cart_price}}</p>
+        </div>
+        <div class="metric-card">
+            <h4>Total Quantity</h4>
+            <p>{{order.cart.total_cart_quantity}}</p>
+        </div>
+    </div>
+    
+    <div class="order_items">
+        {% for item in cart_items %}
+        <div class="item">
+            <h6>{{item.product.product_name}}</h6>
+            <p>Quantity in cart: <strong>{{item.quantity}}</strong></p>
+            <p>Total price of product: <strong>$ {% if item.product.discount_price %} {{item.product.discount_price|mul:item.quantity}} {% else %}{{item.product.original_price|mul:item.quantity}} USD {% endif %}</strong></p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block actions %}
+    {{ block.super }}
+    {% if delete_url %}
+        <a href="{{ delete_url }}" class="button no">{{ delete_item_label }}</a>
+    {% endif %}
+{% endblock %}

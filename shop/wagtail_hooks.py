@@ -5,12 +5,15 @@ from wagtail.snippets.views.snippets import SnippetViewSet
 from wagtail.admin.panels import TabbedInterface, TitleFieldPanel, ObjectList
 
 from shop.models import Order, Cart, CartItem #, OrderFilterSet
+from wagtail import hooks
+from .views import order_viewset
+
 
 class OrderViewSet(SnippetViewSet):
     model = Order
     icon = "tasks"
-    list_display = ["cart_item", "quantity", "price", "date","city","country", "address", UpdatedAtColumn()]
-    list_export = ["cart_item", "quantity", "price", "date","city","country", "address"]
+    list_display = ["cart", "quantity", "price", "date","city","country", "address", UpdatedAtColumn()]
+    list_export = ["cart", "quantity", "price", "date","city","country", "address"]
     list_per_page = 50
     inspect_view_enabled = True
     admin_url_namespace = "order_views"
@@ -18,12 +21,16 @@ class OrderViewSet(SnippetViewSet):
     # filterset_class = OrderFilterSet
 
     edit_handler = TabbedInterface([
-        ObjectList([FieldPanel("customer")], heading="Details"),
-        ObjectList([FieldPanel("quantity")], heading="Preferences"),
+        ObjectList([FieldPanel("customer"),FieldPanel("quantity")], heading="Details"),
+        # ObjectList([FieldPanel("quantity")], heading="Preferences"),
     ])
 
 register_snippet(OrderViewSet)
 # register_snippet(Order)
+
+@hooks.register("register_admin_viewset")
+def register_viewset():
+    return order_viewset
 
 
 class CartItemViewSet(SnippetViewSet):
@@ -37,8 +44,8 @@ class CartItemViewSet(SnippetViewSet):
     # filterset_class = OrderFilterSet
 
     edit_handler = TabbedInterface([
-        ObjectList([FieldPanel("product")], heading="Details"),
-        ObjectList([FieldPanel("quantity")], heading="Preferences"),
+        ObjectList([FieldPanel("product"),FieldPanel("quantity")], heading="Details"),
+        # ObjectList([FieldPanel("quantity")], heading="Preferences"),
     ])
 
 register_snippet(CartItemViewSet)
@@ -47,7 +54,7 @@ register_snippet(CartItemViewSet)
 class CartViewSet(SnippetViewSet):
     model = Cart
     icon = "user"
-    list_display = ["user", UpdatedAtColumn()]
+    list_display = ["user","created_at", UpdatedAtColumn()]
     list_per_page = 50
     inspect_view_enabled = True
     admin_url_namespace = "cart_views"
@@ -55,8 +62,8 @@ class CartViewSet(SnippetViewSet):
     # filterset_class = OrderFilterSet
 
     edit_handler = TabbedInterface([
-        ObjectList([FieldPanel("user")], heading="Details"),
-        # ObjectList([FieldPanel("items")], heading="Preferences"),
+        ObjectList([FieldPanel("user"), FieldPanel("items")], heading="Details"),
+        # ObjectList([FieldPanel("items")], heading="Details"),
     ])
 
 register_snippet(CartViewSet)

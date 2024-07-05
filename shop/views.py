@@ -14,6 +14,8 @@ import stripe
 from home.models import TransactionOption
 from guest_user.decorators import allow_guest_user
 from django.contrib import messages
+from wagtail.admin.viewsets.model import ModelViewSet
+from wagtail.admin.views import generic
 
 # Create your views here.
 def get_products_in_cart(cart):
@@ -236,25 +238,22 @@ class CheckOut(TemplateView):
             messages.success(request, f"Cart update successful !!")
             return redirect('shop:checkout')
         elif action == 'checkout':
-            for item in cart_items: 
-                if item.product.discount_price:
-                    price = item.product.discount_price
-                else:
-                    price = item.product.original_price
-                order = Order(customer=customer, 
-                            cart_item=item, 
-                            price=price, 
-                            address=address, 
-                            city=city,
-                            country=country,  
-                            quantity=item.quantity) 
-                order.save()
 
             total_amount = sum(item.product.discount_price * item.quantity for item in cart_items)
+            total_quantity = sum(item.quantity for item in cart_items)
             if total_amount:
                 total_amount = total_amount
             else:
                 total_amount = sum(item.product.original_price * item.quantity for item in cart_items)
+
+            order = Order(customer=customer, 
+                            cart=cart, 
+                            price=cart.total_cart_price(), 
+                            address=address, 
+                            city=city,
+                            country=country,  
+                            quantity=cart.total_cart_quantity()) 
+            order.save()
             transaction_settings = TransactionOption.for_request(request=request)
             tax = round(total_amount*transaction_settings.tax_rate, 2)
             tax_rate = transaction_settings.tax_rate
@@ -501,3 +500,30 @@ class SearchResultsList(ListView):
         context['products'] = products
         context['cart'] = cart
         return render(request, self.template_name, context)
+    
+class OrderEditView(generic.EditView):
+
+    template_name = "wagtailadmin/generic/edit.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        order = get_object_or_404(Order, id=self.object.pk)
+        if order.cart:
+            cart_items = order.cart.cartitem_set.all()
+            context['cart_items'] = cart_items
+        context["order"] = order
+        
+        return context
+class OrderModelViewSet(ModelViewSet):
+    model = Order
+    form_fields = ["cart", "quantity", "price", "city","country", "address"]
+    list_display = ["cart", "quantity", "price", "city","country", "address"]
+    list_per_page = 50
+    icon = "user"
+    add_to_admin_menu = True
+    copy_view_enabled = True
+    inspect_view_enabled = True
+    # add_to_settings_menu = True
+    edit_view_class = OrderEditView
+
+order_viewset = OrderModelViewSet("order")
