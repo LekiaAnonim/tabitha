@@ -169,6 +169,7 @@ class ProductPage(Page):
             self.get_context(request)
         )
 
+
 # @register_snippet
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -183,7 +184,7 @@ class Cart(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.id, self.user.email, self.created_at}'
+        return f'{self.id, self.user.email, self.updated_at.strftime("%Y-%m-%d %H:%M")}'
     
     def is_in_cart(self, product_id):
         """
@@ -232,10 +233,11 @@ class Cart(models.Model):
             total_quantity += item.quantity
         return total_quantity
 
+
 # @register_snippet
 class CartItem(models.Model):
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, null=True)
-    product = models.ForeignKey('ProductPage', on_delete=models.CASCADE, related_name='cart_product')
+    cart = models.ForeignKey(Cart,  on_delete=models.DO_NOTHING, null=True)
+    product = models.ForeignKey('ProductPage',  on_delete=models.DO_NOTHING, related_name='cart_product')
     quantity = models.PositiveIntegerField(default=1)
 
     panels = [
@@ -247,15 +249,31 @@ class CartItem(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.product}'
+    
+class OrderBag(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    order_items = models.ManyToManyField('ProductPage', through='OrderItem')
+
+class OrderItem(models.Model):
+    product = models.ForeignKey('ProductPage',  on_delete=models.DO_NOTHING, related_name='order_product')
+    quantity = models.PositiveIntegerField(default=1)
+    order_bag = models.ForeignKey(OrderBag,  on_delete=models.DO_NOTHING, null=True, related_name="item_bag")
 
 # @register_snippet   
 class Order(models.Model): 
     cart = models.ForeignKey(Cart, 
-                                on_delete=models.DO_NOTHING, null=True) 
+                                on_delete=models.DO_NOTHING, null=True, related_name="order_cart")
+    order_bag = models.ForeignKey(OrderBag, 
+                                on_delete=models.DO_NOTHING, null=True)
     customer = models.ForeignKey(User, 
                                  on_delete=models.CASCADE, null=True) 
     quantity = models.IntegerField(default=1) 
     price = models.IntegerField() 
+    full_name = models.CharField(max_length=500, default='', blank=True, null=True)
+    email = models.CharField(max_length=500, default='', blank=True, null=True)
+    phone_number = models.CharField(max_length=500, default='', blank=True, null=True)
     address = models.CharField(max_length=500, default='', blank=True, null=True)
     city = models.CharField(max_length=500, default='', blank=True, null=True)
     country = models.CharField(max_length=500, default='', blank=True, null=True)
@@ -265,6 +283,9 @@ class Order(models.Model):
     panels = [
         FieldPanel('cart'),
         FieldPanel('customer'),
+        FieldPanel('full_name'),
+        FieldPanel('email'),
+        FieldPanel('phone_number'),
         FieldPanel('quantity'),
         FieldPanel('price'),
         FieldPanel('address'),
@@ -276,7 +297,7 @@ class Order(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.customer.email}, {self.cart}'
+        return f'{self.id}, {self.customer.email}, {self.date}'
   
     def placeOrder(self): 
         self.save() 
@@ -284,4 +305,5 @@ class Order(models.Model):
     @staticmethod
     def get_orders_by_customer(customer_id): 
         return Order.objects.filter(customer=customer_id).order_by('-date')
-    
+
+

@@ -111,6 +111,8 @@
                             <fieldset class="w-commerce-commercecheckoutblockcontent block-contents">
                                 <label for="name" class="w-commerce-commercecheckoutlabel checkout-label" required>Name *</label>
                                 <input id="name" class="w-commerce-commercecheckoutshippingfullname checkout-field" name="name" type="text" value="{% if request.user.first_name %}{{request.user.first_name}} {{request.user.last_name}}{% else %}{% endif %}" required/>
+                                <label for="phone_number" class="w-commerce-commercecheckoutlabel checkout-label" required>Phone Number *</label>
+                                <input id="phone_number" class="w-commerce-commercecheckoutshippingphonenumber checkout-field" name="phone_number" type="text" value="{% if request.user.phone_number %}{{request.user.phone_number}}{% endif %}" required/>
                                 <label for="address" class="w-commerce-commercecheckoutlabel checkout-label">Street Address *</label>
                                 <input id="address" class="w-commerce-commercecheckoutshippingstreetaddress checkout-field" name="address" type="text" value="{% if request.user.residential_address %}{{request.user.residential_address}}{% else %}{% endif %}" required/>
                                 <label for="city" class="w-commerce-commercecheckoutlabel checkout-label">City *</label>

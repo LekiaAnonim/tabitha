@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from shop.models import ProductPage, Order, Cart, CartItem
+from shop.models import ProductPage, Order, Cart, CartItem, OrderBag, OrderItem
 from shop.models import Category
 from django.views import View 
 from django.views.generic import TemplateView, ListView, DetailView
@@ -194,10 +194,35 @@ class CheckOut(TemplateView):
         address = request.POST.get('address') 
         city = request.POST.get('city')
         country = request.POST.get('country')
+        name = request.POST.get('name') 
+        phone_number = request.POST.get('phone_number')
         email = request.POST.get('email')
         customer = request.user
         cart = Cart.objects.get_or_create(user=request.user)[0]
         cart_items = cart.cartitem_set.all()
+        order_bag  = OrderBag.objects.create(user = request.user)
+
+        order_bag.order_items.set(cart.items.all())
+        order_bag.save()
+        
+        # for item in cart_items:
+        #     OrderBag.objects.create(user = request.user)
+        #     order_bag.order_items.add(item.product)
+        #     order_bag.save()
+
+        # Assuming model_a1 and model_b1 are already created as above
+        # Copy related_items from model_a1 to model_b1
+        # for item in cart.items.all():
+        #     order_bag.order_items.add(OrderBag.objects.get(user = request.user))
+
+
+        for item in cart_items:
+            order_item = OrderItem(
+                order_bag = order_bag,
+                product = item.product,
+                quantity = item.quantity
+            )
+            order_item.save()
 
         action = request.POST.get('action')
         if action == 'add':
@@ -246,14 +271,7 @@ class CheckOut(TemplateView):
             else:
                 total_amount = sum(item.product.original_price * item.quantity for item in cart_items)
 
-            order = Order(customer=customer, 
-                            cart=cart, 
-                            price=cart.total_cart_price(), 
-                            address=address, 
-                            city=city,
-                            country=country,  
-                            quantity=cart.total_cart_quantity()) 
-            order.save()
+            
             transaction_settings = TransactionOption.for_request(request=request)
             tax = round(total_amount*transaction_settings.tax_rate, 2)
             tax_rate = transaction_settings.tax_rate
@@ -271,8 +289,8 @@ class CheckOut(TemplateView):
 
                 # ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
                 checkout_session = stripe.checkout.Session.create(
-                    success_url=domain_url + 'success/',
-                    cancel_url=domain_url + 'cancel/',
+                    success_url=domain_url + '/success/',
+                    cancel_url=domain_url + '/cancel/',
                     payment_method_types=['card'],
                     mode='payment',
                     currency= "usd",
@@ -303,6 +321,23 @@ class CheckOut(TemplateView):
                         } for item in cart_items
                     ]
                 )
+
+                order = Order(customer=customer, 
+                            cart=cart,
+                            order_bag = order_bag,
+                            email=email,
+                            phone_number=phone_number,
+                            full_name=name,
+                            price=cart.total_cart_price(), 
+                            address=address, 
+                            city=city,
+                            country=country,  
+                            quantity=cart.total_cart_quantity()
+                        ) 
+                order.save()
+
+                for item in cart_items:
+                    get_object_or_404(CartItem, id=item.id).delete()
                 
             except Exception as e:
                 return JsonResponse({'error': str(e)})
@@ -508,8 +543,8 @@ class OrderEditView(generic.EditView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         order = get_object_or_404(Order, id=self.object.pk)
-        if order.cart:
-            cart_items = order.cart.cartitem_set.all()
+        if order.order_bag:
+            cart_items = order.order_bag.order_bagitem_set.all()
             context['cart_items'] = cart_items
         context["order"] = order
         

@@ -17,12 +17,43 @@
     .cards{
         display: flex;
         gap: 20px;
+        flex-wrap: wrap;
     }
     .summary-stats{
         margin-bottom: 30px;
     }
+    .order_items{
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+
+    }
+    .order_items .item{
+        padding: 10px;
+        box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+    }
+    .order_items .item *{
+        margin: 0;
+    }
+    .summary-stats h4{
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    h2{
+        font-weight: 800;
+    }
 </style>
 <div class="summary-stats">
+    <h2>Delivery Info</h2>
+    <div class="delivery-info">
+        <p>Customer name: <strong>{{order.full_name}}</strong></p>
+        <p>Customer email: <strong>{{order.email}}</strong></p>
+        <p>Customer phone number: <strong>{{order.phone_number}}</strong></p>
+        <p>Customer address: <strong>{{order.address}}</strong></p>
+        <p>Customer city: <strong>{{order.city}}</strong></p>
+        <p>Customer country: <strong>{{order.country}}</strong></p>
+        <p>Order date: <strong>{{order.date}}</strong></p>
+    </div>
     <div class="cards">
         <div class="metric-card">
             <h4>Total Price</h4>
@@ -34,10 +65,11 @@
         </div>
     </div>
     
+    <h2>Order Items</h2>
     <div class="order_items">
         {% for item in cart_items %}
         <div class="item">
-            <h6>{{item.product.product_name}}</h6>
+            <h4>{{item.product.product_name}}</h4>
             <p>Quantity in cart: <strong>{{item.quantity}}</strong></p>
             <p>Total price of product: <strong>$ {% if item.product.discount_price %} {{item.product.discount_price|mul:item.quantity}} {% else %}{{item.product.original_price|mul:item.quantity}} USD {% endif %}</strong></p>
         </div>
