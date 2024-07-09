@@ -170,7 +170,6 @@ class ProductPage(Page):
         )
 
 
-# @register_snippet
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     items = models.ManyToManyField('ProductPage', through='CartItem')
@@ -234,7 +233,6 @@ class Cart(models.Model):
         return total_quantity
 
 
-# @register_snippet
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart,  on_delete=models.DO_NOTHING, null=True)
     product = models.ForeignKey('ProductPage',  on_delete=models.DO_NOTHING, related_name='cart_product')
@@ -256,12 +254,80 @@ class OrderBag(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     order_items = models.ManyToManyField('ProductPage', through='OrderItem')
 
+    panels = [
+        FieldPanel('user'),
+        FieldPanel('order_items'),
+    ]
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.id, self.user.email, self.updated_at.strftime("%Y-%m-%d %H:%M")}'
+    
+    def is_in_cart(self, product_id):
+        """
+        Check if a product is in the cart.
+        """
+        return self.order_items.filter(id=product_id).exists()
+    
+    def cart_quantity(self, product_id):
+        """
+        Get the quantity of a product in the cart.
+        """
+        if self.is_in_cart(product_id):
+            return self.order_items.get(id=product_id).orderitem.quantity
+        return 0
+    
+    def total_price(self, product_id):
+        """
+        Get the total price of a product in the cart (price * quantity).
+        """
+        if self.is_in_cart(product_id):
+            product = self.order_items.get(id=product_id)
+            if product.discount_price:
+                return product.discount_price * self.cart_quantity(product_id)
+            else:
+                return product.original_price * self.cart_quantity(product_id)
+        return 0
+    
+    def total_cart_price(self):
+        """
+        Get the total price of all items in the cart.
+        """
+        total_price = 0
+        order_items = OrderItem.objects.filter(order_bag=self)
+        for item in order_items:
+            if item.product.discount_price:
+                total_price += item.product.discount_price * item.quantity
+            else:
+                total_price += item.product.original_price * item.quantity
+        return total_price
+    
+    def total_cart_quantity(self):
+        """
+        Get the total quantity of all items in the cart.
+        """
+        total_quantity = 0
+        order_items = OrderItem.objects.filter(order_bag=self)
+        for item in order_items:
+            total_quantity += item.quantity
+        return total_quantity
+
 class OrderItem(models.Model):
     product = models.ForeignKey('ProductPage',  on_delete=models.DO_NOTHING, related_name='order_product')
     quantity = models.PositiveIntegerField(default=1)
     order_bag = models.ForeignKey(OrderBag,  on_delete=models.DO_NOTHING, null=True, related_name="item_bag")
 
-# @register_snippet   
+    panels = [
+        FieldPanel('order_bag'),
+        FieldPanel('product'),
+        FieldPanel('quantity'),
+    ]
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.product}'
+
+ 
 class Order(models.Model): 
     cart = models.ForeignKey(Cart, 
                                 on_delete=models.DO_NOTHING, null=True, related_name="order_cart")
@@ -291,7 +357,6 @@ class Order(models.Model):
         FieldPanel('address'),
         FieldPanel('city'),
         FieldPanel('country'),
-        # FieldPanel('date'),
         FieldPanel('status'),
     ]
 
@@ -305,5 +370,3 @@ class Order(models.Model):
     @staticmethod
     def get_orders_by_customer(customer_id): 
         return Order.objects.filter(customer=customer_id).order_by('-date')
-
-

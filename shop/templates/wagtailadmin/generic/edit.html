@@ -43,6 +43,7 @@
         font-weight: 800;
     }
 </style>
+{% if order %}
 <div class="summary-stats">
     <h2>Delivery Info</h2>
     <div class="delivery-info">
@@ -57,11 +58,11 @@
     <div class="cards">
         <div class="metric-card">
             <h4>Total Price</h4>
-            <p>${{order.cart.total_cart_price}}</p>
+            <p>${{order.order_bag.total_cart_price}}</p>
         </div>
         <div class="metric-card">
             <h4>Total Quantity</h4>
-            <p>{{order.cart.total_cart_quantity}}</p>
+            <p>{{order.order_bag.total_cart_quantity}}</p>
         </div>
     </div>
     
@@ -76,6 +77,7 @@
         {% endfor %}
     </div>
 </div>
+{% endif %}
 
 
 

@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from shop.models import ProductPage, Order, Cart, CartItem, OrderBag, OrderItem
+from shop.models import ProductPage, Cart, CartItem, OrderBag, Order, OrderItem
 from shop.models import Category
 from django.views import View 
 from django.views.generic import TemplateView, ListView, DetailView
@@ -67,7 +67,6 @@ class ShopView(ListView):
                 cart_item.save()
 
             messages.success(request, f"Product added successfully !!")
-            # return redirect('shop:home')
         elif action == 'remove':
             if cart.is_in_cart(product_id):
                 cart_item = get_object_or_404(CartItem, cart=cart, product=product)
@@ -103,7 +102,6 @@ class ShopView(ListView):
         context['products'] = products
         context['cart'] = cart
         return context
-	
 
 class CategoryProductView(ListView):
     model = Category
@@ -544,7 +542,8 @@ class OrderEditView(generic.EditView):
         context = super().get_context_data(**kwargs)
         order = get_object_or_404(Order, id=self.object.pk)
         if order.order_bag:
-            cart_items = order.order_bag.order_bagitem_set.all()
+            order_items = OrderItem.objects.filter(order_bag = order.order_bag)
+            cart_items = order_items
             context['cart_items'] = cart_items
         context["order"] = order
         
